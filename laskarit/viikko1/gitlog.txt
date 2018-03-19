@@ -1,0 +1,115 @@
+commit 289f61425f84320d0d9ee57835615c4d4521f6db
+Author: Lauri <lauri.pyyhkala@helsinki.fi>
+Date:   Mon Mar 19 15:17:23 2018 +0200
+
+    Muuttelua
+
+ tiedostoja/file1.txt  | 1 -
+ tiedostoja/file2.txt  | 1 -
+ tiedostoja/file22.txt | 1 +
+ 3 files changed, 1 insertion(+), 2 deletions(-)
+
+commit 4df8a3129e8c509e852e0d6c9d2189e82ee628df
+Author: Lauri <lauri.pyyhkala@helsinki.fi>
+Date:   Mon Mar 19 15:00:14 2018 +0200
+
+    Uusi kansio
+
+ tiedostoja/file1.txt | 1 +
+ tiedostoja/file2.txt | 1 +
+ tiedostoja/file3.txt | 3 +++
+ 3 files changed, 5 insertions(+)
+
+commit 36e2b6c80af45d842cb10aab23c0a6f77bb8528d
+Author: Lauri <lauri.pyyhkala@helsinki.fi>
+Date:   Mon Mar 19 14:53:21 2018 +0200
+
+    Lisää muutoksia
+
+ eka.txt      |  3 ++-
+ kolmas.txt   |  7 +++++++
+ tiedosto.txt | 33 ---------------------------------
+ 3 files changed, 9 insertions(+), 34 deletions(-)
+
+commit 822ef03c85c8e569e260e1f24f9fa66a17173127
+Author: Lauri <lauri.pyyhkala@helsinki.fi>
+Date:   Mon Mar 19 14:51:19 2018 +0200
+
+    Muutos
+
+ eka.txt | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+commit 47089042069f593675e6fe4da84798b4348f1697
+Author: Lauri <lauri.pyyhkala@helsinki.fi>
+Date:   Mon Mar 19 14:50:42 2018 +0200
+
+    Poisto
+
+ toinen.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit edf81b933fa6b6669676b168eafd6fe6ba592eb5
+Author: Lauri <lauri.pyyhkala@helsinki.fi>
+Date:   Mon Mar 19 14:48:40 2018 +0200
+
+    Muutettu tekstiä
+
+ tiedosto.txt | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
+
+commit aa841dd1d52de81daf976379669a58ecd6306cf1
+Author: Lauri <lauri.pyyhkala@helsinki.fi>
+Date:   Mon Mar 19 14:45:32 2018 +0200
+
+    Lisätty tekstiä
+
+ tiedosto.txt | 42 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 41 insertions(+), 1 deletion(-)
+
+commit 459df80a0e89fa913d4eb8eda4ed2b04729e7fb7
+Author: Lauri <lauri.pyyhkala@helsinki.fi>
+Date:   Mon Mar 19 14:41:22 2018 +0200
+
+    Uusi kansio
+
+ stuff/viesti.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 3343353ba99517dcbfff5c8111d1325096d99d03
+Author: Lauri <lauri.pyyhkala@helsinki.fi>
+Date:   Mon Mar 19 14:40:21 2018 +0200
+
+    Muutoksia
+
+ kolmas.txt | 1 +
+ toinen.txt | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit dd43dab12e65732745a97758a98f7e24bb30a8b9
+Author: Lauri <lauri.pyyhkala@helsinki.fi>
+Date:   Mon Mar 19 14:39:21 2018 +0200
+
+    tiedoston lisäys
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit f3bd75c371e61c0ef45f4b9c39f31827a98e9792
+Author: Lauri <lauri.pyyhkala@helsinki.fi>
+Date:   Mon Mar 19 14:37:26 2018 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit 6c6764e165497b2fece147e83f62649b63a0cd84
+Author: Lauri <lauri.pyyhkala@helsinki.fi>
+Date:   Mon Mar 19 14:35:33 2018 +0200
+
+    tiedosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
