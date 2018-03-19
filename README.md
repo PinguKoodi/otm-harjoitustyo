@@ -11,3 +11,5 @@ Viikolla 1 kurssilla opeteltiin gitin alkeita, ja tämä hakemisto on tehty sit�
 Gitin versionhallintasysteemi on erittäin hyvä ja helppo käyttää
 
 Tässä vielä viimeiset terveiset paikallisesta repositoriosta
+
+Kokeillaan vielä muuttaa tekstiä hieman
