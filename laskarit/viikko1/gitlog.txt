@@ -113,3 +113,5 @@ Date:   Mon Mar 19 14:35:33 2018 +0200
 
  tiedosto.txt | 0
  1 file changed, 0 insertions(+), 0 deletions(-)
+
+Tämä on ylimääräinen rivi tehtävää varten
