@@ -6,12 +6,13 @@
 
 [gitlog.txt](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/laskarit/viikko1/gitlog.txt)
 
-
 [Työn määrittelydokumentti](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/vaatimusm%C3%A4%C3%A4rittely.md)
+
+[Tuntikirjanpito](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/tuntikirjanpito.md)
+
+
 
 Viikolla 1 kurssilla opeteltiin gitin alkeita, ja tämä hakemisto on tehty sitä varten. Tavoitteena on ilmeisesti toteuttaa jokin harjoitustyö
 Gitin versionhallintasysteemi on erittäin hyvä ja helppo käyttää
 
 Tässä vielä viimeiset terveiset paikallisesta repositoriosta
-
-Kokeillaan vielä muuttaa tekstiä hieman
