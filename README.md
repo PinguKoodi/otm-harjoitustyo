@@ -1,10 +1,10 @@
 # Lue tämä
 
-**Viikko1**
+## Society
 
-[komentorivi.txt](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/laskarit/viikko1/komentorivi.txt)
+Jännittävä tietokonepeli jossa toimit oman yhteiskuntasi ylimpänä käskynhaltijana.
+Sinun tulee tarjota kaikille ihmisille työtä ja hyödykkeitä, jotta he pysyvät tyytyväisinä, ja tuottavat yhteiskunnalla tehokkaasti tuotteita.
 
-[gitlog.txt](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/laskarit/viikko1/gitlog.txt)
 
 [Työn määrittelydokumentti](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/vaatimusm%C3%A4%C3%A4rittely.md)
 
@@ -12,7 +12,4 @@
 
 
 
-Viikolla 1 kurssilla opeteltiin gitin alkeita, ja tämä hakemisto on tehty sitä varten. Tavoitteena on ilmeisesti toteuttaa jokin harjoitustyö
-Gitin versionhallintasysteemi on erittäin hyvä ja helppo käyttää
 
-Tässä vielä viimeiset terveiset paikallisesta repositoriosta

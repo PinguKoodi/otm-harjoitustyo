@@ -48,6 +48,12 @@ public class Human {
     public void setExperience(int experience) {
         this.experience = experience;
     }
-    
-    
+    public void growOlder() {
+        this.age++;
+        this.experience += 1;
+    }
+    @Override
+    public String toString() {
+        return this.name + ", Age: " + this.age + ", experience: " + this.experience;
+    }
 }

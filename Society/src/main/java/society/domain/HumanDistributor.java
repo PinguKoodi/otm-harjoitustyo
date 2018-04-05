@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  *
@@ -41,6 +42,15 @@ public class HumanDistributor {
         List<Human> workerList = new ArrayList();
         for(Human h: this.list) {
             if(this.workPlaces.get(h) != null) {
+                workerList.add(h);
+            }
+        }
+        return workerList;
+    }
+    public List<Human> getListOfWorkersAtPlace(Factories f) {
+        List<Human> workerList = new ArrayList();
+        for(Human h: this.list) {
+            if(this.workPlaces.get(h) == f) {
                 workerList.add(h);
             }
         }
@@ -103,9 +113,24 @@ public class HumanDistributor {
         }
         return null;
     }
+    public void makeOneYearOlder() {
+        List<Human> toBeKilled = new ArrayList();
+        for(Human h :this.list) {
+            h.growOlder();
+            if(h.getAge() > 70) {
+                Random r = new Random();
+                if(r.nextInt(30)+h.getAge()<100) {
+                    toBeKilled.add(h);
+                }       
+            }
+        }
+        this.list.removeAll(toBeKilled);
+    }
+    
     public void kill(double shortage) {
         while(shortage <0) {
-            this.list.remove(0);
+            Human dead = this.list.remove(0);
+            this.workPlaces.remove(dead);
             shortage++;
         }
     }
