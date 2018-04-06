@@ -38,4 +38,7 @@ public class Multiplier {
         }
         return totalMult;
     }
+    public double getFarmMultiplier() {
+        return 2;
+    }
 }
