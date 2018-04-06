@@ -128,7 +128,7 @@ public class HumanDistributor {
     }
     
     public void kill(double shortage) {
-        while(shortage <0) {
+        while(shortage <0 && !this.list.isEmpty()) {
             Human dead = this.list.remove(0);
             this.workPlaces.remove(dead);
             shortage++;

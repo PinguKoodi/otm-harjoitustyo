@@ -28,17 +28,21 @@ public class Multiplier {
             totalXP += h.getExperience();
         }
         double totalMult = 1;
-        if(list.size() != 0) {
+        if(!list.isEmpty()) {
             totalMult = totalXP / list.size();
         }
         totalMult *= science;
-        double soldierPercent = this.hD.getNumberOfWorkers()[3]/this.hD.numberOfAdults();
-        if(soldierPercent > 0.15 || soldierPercent < 0.05) {
+        if(this.hD.numberOfAdults() != 0) {
+            double soldierPercent = this.hD.getNumberOfWorkers()[3]/this.hD.numberOfAdults();
+            if(soldierPercent > 0.15 || soldierPercent < 0.05) {
             totalMult *= 0.9;
         }
+        }
+        
+        
         return totalMult;
     }
     public double getFarmMultiplier() {
-        return 2;
+        return 3;
     }
 }
