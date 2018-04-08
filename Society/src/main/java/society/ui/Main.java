@@ -47,7 +47,7 @@ public class Main extends Application {
     @Override
     public void start(Stage window) {
         int[] workers = this.hD.getNumberOfWorkers();
-        double[] resources = this.logic.getResources();
+        double[] resources = this.logic.getResourcesDisplay();
         GridPane setting = new GridPane();
         setting.setVgap(20);
         setting.setHgap(20);
@@ -92,23 +92,55 @@ public class Main extends Application {
         setting.add(hFarmB, 1, 2);
         farmB.setOnAction((event) -> {
             logic.assignWorker(Factories.FARM);
-            farmers.setText("Farmers:" + this.hD.getNumberOfWorkers()[0]);
+            farmers.setText("Farmers: " + this.hD.getNumberOfWorkers()[0]);
+            unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
+        });
+        
+        Button factoryB = new Button("Assing to Factory");
+        HBox hFactoryB = new HBox(10);
+        hFactoryB.getChildren().add(factoryB);
+        setting.add(hFactoryB, 1, 4);
+        factoryB.setOnAction((event) -> {
+            logic.assignWorker(Factories.FACTORY);
+            workersL.setText("Workers: " + this.hD.getNumberOfWorkers()[1]);
+            unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
+        });
+        Button laboratoryB = new Button("Assing to Laboratory");
+        HBox hLaboratoryB = new HBox(10);
+        hLaboratoryB.getChildren().add(laboratoryB);
+        setting.add(hLaboratoryB, 3, 2);
+        laboratoryB.setOnAction((event) -> {
+            logic.assignWorker(Factories.LABORATORY);
+            scientists.setText("Scientists: " + this.hD.getNumberOfWorkers()[2]);
+            unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
+        });
+        
+        Button armyB = new Button("Assing to Army");
+        HBox hArmyB = new HBox(10);
+        hArmyB.getChildren().add(armyB);
+        setting.add(hArmyB, 3, 4);
+        armyB.setOnAction((event) -> {
+            logic.assignWorker(Factories.ARMY);
+            soldiers.setText("Soldiers: " + this.hD.getNumberOfWorkers()[3]);
             unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
         });
         
         
+        
         btn.setOnAction((event) -> {
-            this.logic.endTurn();
+            if(this.logic.endTurn()) {
+                window.close();
+            }
             int[] workers1 = this.hD.getNumberOfWorkers();
-            double[] resources1 = this.logic.getResources();
+            double[] resources1 = this.logic.getResourcesDisplay();
             foodTools.setText("Food:" + resources1[0]);
             tools.setText("Tools:" + resources1[1]);
-            scienceGuns.setText("Science:" + resources[2]);
-            guns.setText("Guns:" + resources[3]);
-            farmers.setText("Farmers:" + workers[0]);
-            workersL.setText("Workers:" + workers[1]);
-            scientists.setText("Scientists:" + workers[2]);
-            soldiers.setText("Soldiers:" + workers[3]);
+            scienceGuns.setText("Science:" + resources1[2]);
+            guns.setText("Guns:" + resources1[3]);
+            farmers.setText("Farmers: " + workers1[0]);
+            workersL.setText("Workers: " + workers1[1]);
+            scientists.setText("Scientists: " + workers1[2]);
+            soldiers.setText("Soldiers: " + workers1[3]);
             yearL.setText("Year: " + this.logic.getYear());
             unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
             children.setText("Children: " + this.hD.numberOfChilds());

@@ -5,6 +5,7 @@
  */
 package society.domain;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 import javafx.beans.property.DoubleProperty;
@@ -44,7 +45,10 @@ public class Logic {
             }
 
         }
-        this.hD.addHuman(new Human("D12", 20));
+        this.hD.addHuman(new Human("D-503", 20));
+        this.hD.addHuman(new Human("I-330", 20));
+        this.hD.addHuman(new Human("O-90", 20));
+        this.hD.addHuman(new Human("U-180", 20));
     }
 
     public void assignWorker(Factories f) {
@@ -54,7 +58,7 @@ public class Logic {
         }
     }
 
-    public void endTurn() {
+    public boolean endTurn() {
         int adults = this.hD.numberOfAdults();
 //        List<Human> listOfWorkers = this.hD.getListOfWorkers();
 //        for(Human h: listOfWorkers) { 
@@ -64,10 +68,7 @@ public class Logic {
         int[] numberOfWorkers = this.hD.getNumberOfWorkers();
         // WIP
         for (int i = 0; i < 4; i++) {
-            double multiplier = 3;
-            if (i == 1) {
-                multiplier = this.mult.getFactoryMultiplier();
-            }
+            double multiplier = this.mult.getMultiplier(i);
             this.resources[i] = this.resources[i] + numberOfWorkers[i] * multiplier;
         }
         this.resources[0] = this.resources[0] - this.hD.getList().size();
@@ -76,7 +77,7 @@ public class Logic {
             this.hD.kill(this.resources[0]);
         }
         if (this.hD.getList().isEmpty()) {
-            return;
+            return true;
         }
         this.hD.makeOneYearOlder();
         int babies = adults / 10;
@@ -88,7 +89,8 @@ public class Logic {
             System.out.println(i + ". " + "Workers: " + numberOfWorkers[i] + ", Storage: " + resources[i]);
         }
         System.out.println("Year " + year + "   Unemployed: " + this.hD.numberOfUnemployed() + "Children " + this.hD.numberOfChilds());
-
+        
+        return false;
     }
 
     public boolean isUnemployed() {
@@ -97,6 +99,14 @@ public class Logic {
 
     public double[] getResources() {
         return resources;
+    }
+    public double[] getResourcesDisplay() {
+        double[] trimmed = new double[4];
+        for(int i = 0;i<4;i++) {
+            trimmed[i] = Math.round(this.resources[i]*10);
+            trimmed[i] = trimmed[i]/10;
+        }
+        return trimmed;
     }
 
     public int getYear() {

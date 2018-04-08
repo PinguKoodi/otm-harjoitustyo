@@ -34,7 +34,10 @@ public class HumanDistributor {
         }
         this.workPlaces.put(h, f);
     }
-
+    public int getPopulation() {
+        return this.list.size();
+    }
+    
     public List<Human> getList() {
         return list;
     }
