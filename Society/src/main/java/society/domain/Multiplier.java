@@ -23,10 +23,14 @@ public class Multiplier {
 
     public double getMultiplier(int i) {
         switch (i) {
-            case 0: return this.getFarmMultiplier();
-            case 1: return this.getFactoryMultiplier();
-            case 2: return this.getLaboratoryMultiplier();
-            case 3: return this.getArmyMultiplier();
+            case 0:
+                return this.getFarmMultiplier();
+            case 1:
+                return this.getFactoryMultiplier();
+            case 2:
+                return this.getLaboratoryMultiplier();
+            case 3:
+                return this.getArmyMultiplier();
         }
         return 1;
     }
@@ -34,6 +38,7 @@ public class Multiplier {
     public double getFactoryMultiplier() {
         double science = this.l.getResources()[2];
         science /= 100;
+        science += 1;
         int totalXP = 0;
         List<Human> list = this.hD.getListOfWorkersAtPlace(Factories.FACTORY);
         for (Human h : this.hD.getListOfWorkersAtPlace(Factories.FACTORY)) {
@@ -49,23 +54,69 @@ public class Multiplier {
         totalMult *= science;
         if (this.hD.numberOfAdults() != 0) {
             double soldierPercent = this.hD.getNumberOfWorkers()[3] / this.hD.numberOfAdults();
-            if (soldierPercent > 0.15 || soldierPercent < 0.05) {
+            if (soldierPercent > 0.2 || soldierPercent < 0.05) {
                 totalMult *= 0.9;
             }
         }
 
         return totalMult;
-        
+
     }
 
     public double getFarmMultiplier() {
-        return 3;
+        double mult = 2.0;
+        double experience = 0;
+        int farmers = this.hD.getListOfWorkersAtPlace(Factories.FARM).size();
+        for (Human h : this.hD.getListOfWorkersAtPlace(Factories.FARM)) {
+            experience += h.getExperience();
+        }
+        experience /= farmers;
+        experience /= 100;
+        experience += 1;
+        mult *= experience;
+        if (this.hD.numberOfAdults() != 0) {
+            double soldierPercent = this.hD.getNumberOfWorkers()[3] / this.hD.numberOfAdults();
+            if (soldierPercent > 0.2 || soldierPercent < 0.05) {
+                mult *= 0.9;
+            }
+        }
+        double tools = this.l.getResources()[1];
+        if (tools < farmers) {
+            mult *= 0.7;
+        } else {
+            tools = tools / farmers;
+            tools /= 100;
+            tools *= 2;
+            tools += 1;
+            mult *= tools;
+        }
+        return mult;
     }
+
     public double getLaboratoryMultiplier() {
-        return 3;
+        double mult = 0.1;
+        double experience = 0;
+        int scientists =  this.hD.getListOfWorkersAtPlace(Factories.LABORATORY).size();
+        for (Human h : this.hD.getListOfWorkersAtPlace(Factories.LABORATORY)) {
+            experience = experience + Math.pow(h.getExperience()*0.1, 2);
+        }
+        experience /= scientists;
+        experience /= 100;
+        experience++;
+        mult *= experience;
+        return mult;
     }
+
     public double getArmyMultiplier() {
-        return 3;
+        double mult = 1;
+        double tools = this.l.getResources()[1];
+        int soldiers = this.hD.getListOfWorkersAtPlace(Factories.ARMY).size();
+        tools = tools/soldiers;
+        tools /= 100;
+        tools++;
+        tools = Math.min(tools, 2);
+        mult *= tools;
+        return mult;
     }
-    
+
 }

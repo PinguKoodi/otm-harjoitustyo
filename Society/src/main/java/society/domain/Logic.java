@@ -29,6 +29,9 @@ public class Logic {
         this.hD = hD;
         this.resources = new double[4];
         this.resources[0] = 100;
+        for (int i = 1; i < 4; i++) {
+            this.resources[i] = 0;
+        }
         this.year = 0;
         this.rng = new Random();
         this.mult = new Multiplier(this, this.hD);
@@ -41,7 +44,7 @@ public class Logic {
             if (i % 2 == 0) {
                 this.hD.setHumanFactory(h, Factories.FARM);
             } else {
-                this.hD.setHumanFactory(h, Factories.FACTORY);
+                this.hD.addHuman(h);
             }
 
         }
@@ -68,8 +71,10 @@ public class Logic {
         int[] numberOfWorkers = this.hD.getNumberOfWorkers();
         // WIP
         for (int i = 0; i < 4; i++) {
-            double multiplier = this.mult.getMultiplier(i);
-            this.resources[i] = this.resources[i] + numberOfWorkers[i] * multiplier;
+            if (numberOfWorkers[i] > 0) {
+                double multiplier = this.mult.getMultiplier(i);
+                this.resources[i] = this.resources[i] + (numberOfWorkers[i] * multiplier);
+            }
         }
         this.resources[0] = this.resources[0] - this.hD.getList().size();
         calculateHappiness(foodIsOut);
@@ -89,7 +94,6 @@ public class Logic {
             System.out.println(i + ". " + "Workers: " + numberOfWorkers[i] + ", Storage: " + resources[i]);
         }
         System.out.println("Year " + year + "   Unemployed: " + this.hD.numberOfUnemployed() + "Children " + this.hD.numberOfChilds());
-        
         return false;
     }
 
@@ -100,11 +104,12 @@ public class Logic {
     public double[] getResources() {
         return resources;
     }
+
     public double[] getResourcesDisplay() {
         double[] trimmed = new double[4];
-        for(int i = 0;i<4;i++) {
-            trimmed[i] = Math.round(this.resources[i]*10);
-            trimmed[i] = trimmed[i]/10;
+        for (int i = 0; i < 4; i++) {
+            trimmed[i] = Math.round(this.resources[i] * 10);
+            trimmed[i] = trimmed[i] / 10;
         }
         return trimmed;
     }
@@ -124,11 +129,19 @@ public class Logic {
         } else if (resources[0] > amountOfPeople) {
             this.happiness += 5;
         }
-        this.happiness += (resources[1] / amountOfPeople) - 1;
-        this.happiness += resources[2] - year * 2;
+        this.happiness += ((resources[1] / amountOfPeople) - 1);
+        this.happiness += (resources[2] - year * 2);
         if (this.hD.getListOfWorkersAtPlace(Factories.ARMY).size() > amountOfPeople * 0.2) {
             this.happiness += -5;
         }
+        this.happiness = Math.max(0, happiness);
+        this.happiness = Math.min(100, happiness);
 
+    }
+
+    public double getHappiness() {
+        double temp = Math.round(happiness * 10);
+        temp /= 10;
+        return temp;
     }
 }

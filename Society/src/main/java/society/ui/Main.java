@@ -18,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -52,10 +53,10 @@ public class Main extends Application {
         setting.setVgap(20);
         setting.setHgap(20);
         setting.setPadding(new Insets(25, 25, 25, 25));
-        Label farmers =new Label("Farmers:" + workers[0]);
-        Label workersL =new Label("Workers:" + workers[1]);
-        Label scientists =new Label("Scientists:" + workers[2]);
-        Label soldiers =new Label("Soldiers:" + workers[3]);
+        Label farmers = new Label("Farmers:" + workers[0]);
+        Label workersL = new Label("Workers:" + workers[1]);
+        Label scientists = new Label("Scientists:" + workers[2]);
+        Label soldiers = new Label("Soldiers:" + workers[3]);
         setting.add(farmers, 1, 1);
         setting.add(workersL, 1, 3);
         setting.add(scientists, 3, 1);
@@ -70,8 +71,8 @@ public class Main extends Application {
         guns.setMinWidth(100);
         setting.add(foodTools, 1, 0);
         setting.add(tools, 2, 0);
-        setting.add(scienceGuns, 3, 0); 
-        setting.add(guns, 4,0);
+        setting.add(scienceGuns, 3, 0);
+        setting.add(guns, 4, 0);
 //        setting.add(new Label("Tools:" + this.logic.getResources()[1]), 2, 0);
 //        setting.add(new Label("Science:" + this.logic.getResources()[2]), 3, 0);
 //        setting.add(new Label("Guns:" + this.logic.getResources()[3]), 4, 0);
@@ -80,12 +81,14 @@ public class Main extends Application {
         Label unemployed = new Label("Unemployed: " + this.hD.numberOfUnemployed());
         setting.add(unemployed, 2, 5);
         Label children = new Label("Children: " + this.hD.numberOfChilds());
-        setting.add(children, 3,5);
+        setting.add(children, 3, 5);
+        Label happiness = new Label("Happiness: " + this.logic.getHappiness());
+        setting.add(happiness, 4, 5);
         Button btn = new Button("End Turn");
         HBox hbBtn = new HBox(10);
         hbBtn.getChildren().add(btn);
-        setting.add(hbBtn, 4, 5);
-        
+        setting.add(hbBtn, 4, 6);
+
         Button farmB = new Button("Assing to Farm");
         HBox hFarmB = new HBox(10);
         hFarmB.getChildren().add(farmB);
@@ -95,7 +98,7 @@ public class Main extends Application {
             farmers.setText("Farmers: " + this.hD.getNumberOfWorkers()[0]);
             unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
         });
-        
+
         Button factoryB = new Button("Assing to Factory");
         HBox hFactoryB = new HBox(10);
         hFactoryB.getChildren().add(factoryB);
@@ -114,7 +117,7 @@ public class Main extends Application {
             scientists.setText("Scientists: " + this.hD.getNumberOfWorkers()[2]);
             unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
         });
-        
+
         Button armyB = new Button("Assing to Army");
         HBox hArmyB = new HBox(10);
         hArmyB.getChildren().add(armyB);
@@ -124,12 +127,25 @@ public class Main extends Application {
             soldiers.setText("Soldiers: " + this.hD.getNumberOfWorkers()[3]);
             unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
         });
+
+        BorderPane setting2 = new BorderPane();
+        setting2.setMinSize(50,50);
+        setting2.setTop(new Label("You have lost"));
         
-        
-        
+        Button endGame = new Button("Exit game");
+        endGame.setOnAction((event) -> {
+            window.close();
+        });
+        setting2.setCenter(new Label("You got in total " + this.logic.getResourcesDisplay()[2] + " science points and your reign lasted for "
+                + this.logic.getYear() + " years."));
+        setting2.setBottom(endGame);
+        Scene view2 = new Scene(setting2);
+        Scene view = new Scene(setting);
         btn.setOnAction((event) -> {
-            if(this.logic.endTurn()) {
-                window.close();
+            if (this.logic.endTurn()) {
+                setting2.setCenter(new Label("You got in total " + this.logic.getResourcesDisplay()[2] + " science points and your reign lasted for "
+                + this.logic.getYear() + " years."));
+                window.setScene(view2);
             }
             int[] workers1 = this.hD.getNumberOfWorkers();
             double[] resources1 = this.logic.getResourcesDisplay();
@@ -144,10 +160,8 @@ public class Main extends Application {
             yearL.setText("Year: " + this.logic.getYear());
             unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
             children.setText("Children: " + this.hD.numberOfChilds());
+            happiness.setText("Happiness: " + this.logic.getHappiness());
         });
-
-        Scene view = new Scene(setting);
-
         window.setScene(view);
         window.show();
     }
