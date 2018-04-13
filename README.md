@@ -10,6 +10,6 @@ Sinun tulee tarjota kaikille ihmisille työtä ja hyödykkeitä, jotta he pysyv�
 
 [Tuntikirjanpito](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/tuntikirjanpito.md)
 
-
+[Arkkitehtuurikuvaus](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/arkkitehtuuri.md)
 
 
