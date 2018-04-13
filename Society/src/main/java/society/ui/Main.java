@@ -18,10 +18,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -47,6 +49,24 @@ public class Main extends Application {
 
     @Override
     public void start(Stage window) {
+        GridPane startSet = new GridPane();
+        startSet.setMinWidth(150);
+        startSet.setVgap(20);
+        Button beginGame = new Button("Start new game");
+        HBox bGBtn = new HBox(10);
+        startSet.setAlignment(Pos.CENTER);
+        bGBtn.getChildren().add(beginGame);
+        bGBtn.setAlignment(Pos.CENTER_RIGHT);
+        startSet.add(bGBtn, 0, 0);
+        Button exitGame = new Button("Exit game");
+        startSet.add(exitGame, 0, 2);
+        Button loadGame = new Button("Load game");
+//        startSet.add(loadGame, 0, 1);
+        
+        
+        
+        Scene start = new Scene(startSet);
+        
         int[] workers = this.hD.getNumberOfWorkers();
         double[] resources = this.logic.getResourcesDisplay();
         GridPane setting = new GridPane();
@@ -127,7 +147,21 @@ public class Main extends Application {
             soldiers.setText("Soldiers: " + this.hD.getNumberOfWorkers()[3]);
             unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
         });
-
+        Button showHumans = new Button("Human overview");
+        setting.add(showHumans, 1, 6);
+        showHumans.setOnAction((event) -> {
+            Stage humanList = new Stage();
+            humanList.setTitle("List of Humans");
+            ScrollPane box = new ScrollPane();
+            box.setMaxHeight(600);
+            box.setMinWidth(300);
+            String text = this.hD.getHumansDisplay();
+            box.setContent(new Text(text));
+            Scene listScene = new Scene(box);
+            humanList.setScene(listScene);
+            humanList.show();
+        });
+        
         BorderPane setting2 = new BorderPane();
         setting2.setMinSize(50,50);
         setting2.setTop(new Label("You have lost"));
@@ -141,6 +175,16 @@ public class Main extends Application {
         setting2.setBottom(endGame);
         Scene view2 = new Scene(setting2);
         Scene view = new Scene(setting);
+        beginGame.setOnAction((event) -> {
+            window.setScene(view);
+        });
+        exitGame.setOnAction((event) -> {
+            window.close();
+        });
+        loadGame.setOnAction((event) -> {
+            
+        });
+        
         btn.setOnAction((event) -> {
             if (this.logic.endTurn()) {
                 setting2.setCenter(new Label("You got in total " + this.logic.getResourcesDisplay()[2] + " science points and your reign lasted for "
@@ -162,8 +206,9 @@ public class Main extends Application {
             children.setText("Children: " + this.hD.numberOfChilds());
             happiness.setText("Happiness: " + this.logic.getHappiness());
         });
-        window.setScene(view);
+        window.setScene(start);
         window.show();
+        
     }
 
     public static void main(String[] args) {

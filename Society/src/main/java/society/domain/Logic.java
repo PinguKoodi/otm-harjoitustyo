@@ -40,7 +40,7 @@ public class Logic {
 
     public void createFirstHumans() {
         for (int i = 0; i < 12; i++) {
-            Human h = new Human("A" + i, 18 + i);
+            Human h = new Human("A-" + i, 18 + i);
             if (i % 2 == 0) {
                 this.hD.setHumanFactory(h, Factories.FARM);
             } else {
@@ -90,10 +90,12 @@ public class Logic {
             this.hD.addHuman(new Human("A" + this.rng.nextInt(1000)));
         }
         year++;
-        for (int i = 0; i < 4; i++) {
-            System.out.println(i + ". " + "Workers: " + numberOfWorkers[i] + ", Storage: " + resources[i]);
-        }
-        System.out.println("Year " + year + "   Unemployed: " + this.hD.numberOfUnemployed() + "Children " + this.hD.numberOfChilds());
+//      Print out for testing, in case UI doesn't work
+//        for (int i = 0; i < 4; i++) {
+
+//            System.out.println(i + ". " + "Workers: " + numberOfWorkers[i] + ", Storage: " + resources[i]);
+//        }
+//        System.out.println("Year " + year + "   Unemployed: " + this.hD.numberOfUnemployed() + "Children " + this.hD.numberOfChilds());
         return false;
     }
 
