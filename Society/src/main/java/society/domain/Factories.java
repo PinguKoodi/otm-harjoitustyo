@@ -10,5 +10,6 @@ package society.domain;
  * @author pyylauri
  */
 public enum Factories {
+
     FARM, FACTORY, LABORATORY, ARMY
 }

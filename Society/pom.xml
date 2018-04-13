@@ -18,7 +18,18 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources/</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>saveData.txt</exclude>
+                    <exclude>saveHumans.txt</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -67,6 +78,9 @@
                                     <mainClass>society.ui.Main</mainClass>
                                 </transformer>
                             </transformers>
+                            <includes>
+                                <include>src/main/resources/</include>
+                            </includes>
                         </configuration>
                     </execution>
                 </executions>

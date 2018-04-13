@@ -7,10 +7,9 @@ package society.domain;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import society.data.FileOperator;
 
 /**
  *
@@ -24,6 +23,7 @@ public class Logic {
     private Random rng;
     private Multiplier mult;
     private double happiness;
+    private FileOperator operator;
 
     public Logic(HumanDistributor hD) {
         this.hD = hD;
@@ -36,22 +36,49 @@ public class Logic {
         this.rng = new Random();
         this.mult = new Multiplier(this, this.hD);
         this.happiness = 50;
+        this.operator = new FileOperator(this);
     }
 
-    public void createFirstHumans() {
-        for (int i = 0; i < 12; i++) {
-            Human h = new Human("A-" + i, 18 + i);
-            if (i % 2 == 0) {
-                this.hD.setHumanFactory(h, Factories.FARM);
-            } else {
-                this.hD.addHuman(h);
-            }
-
+    public void startGame(boolean loadedGame) {
+//        for (int i = 0; i < 12; i++) {
+//            Human h = new Human("A-" + i, 18 + i);
+//            if (i % 2 == 0) {
+//                this.hD.setHumanFactory(h, Factories.FARM);
+//            } else {
+//                this.hD.addHuman(h);
+//            }
+//        }
+//        this.hD.addHuman(new Human("D-503", 20));
+//        this.hD.addHuman(new Human("I-330", 20));
+//        this.hD.addHuman(new Human("O-90", 20));
+//        this.hD.addHuman(new Human("U-180", 20));
+        if (loadedGame) {
+            operator.switchToLoadFromSave();
         }
-        this.hD.addHuman(new Human("D-503", 20));
-        this.hD.addHuman(new Human("I-330", 20));
-        this.hD.addHuman(new Human("O-90", 20));
-        this.hD.addHuman(new Human("U-180", 20));
+        this.loadHumans();
+
+    }
+
+    public void loadHumans() {
+        double[] values = operator.readValuesFromFile();
+        Map<Human, Factories> humans = operator.readHumansFromFile();
+        for (int i = 0; i < 6; i++) {
+            if (i < 4) {
+                resources[i] = values[i];
+            } else if (i == 4) {
+                this.year = (int) values[i];
+            } else {
+                this.happiness = values[i];
+            }
+        }
+        for (Human h : humans.keySet()) {
+            this.hD.addHuman(h);
+            if (humans.get(h) != null) {
+                this.hD.setHumanFactory(h, humans.get(h));
+            }
+        }
+        this.hD.sortHumansByAge();
+        operator.switchToLoadFromSave();
     }
 
     public void assignWorker(Factories f) {
@@ -59,6 +86,11 @@ public class Logic {
             Human h = this.hD.getUnemployed();
             this.hD.setHumanFactory(h, f);
         }
+    }
+
+    public void saveToFile() {
+        operator.saveValuesToFile();
+        operator.saveHumansToFile();
     }
 
     public boolean endTurn() {
@@ -69,7 +101,6 @@ public class Logic {
 //Vaihtoehtoinen ratkaisu
         boolean foodIsOut = this.resources[0] < 0;
         int[] numberOfWorkers = this.hD.getNumberOfWorkers();
-        // WIP
         for (int i = 0; i < 4; i++) {
             if (numberOfWorkers[i] > 0) {
                 double multiplier = this.mult.getMultiplier(i);
@@ -85,9 +116,12 @@ public class Logic {
             return true;
         }
         this.hD.makeOneYearOlder();
-        int babies = adults / 10;
+        double babiesValue = rng.nextInt(this.hD.makeBabies()) * 0.7;
+        int babies = (int) babiesValue;
         for (int i = 0; i < babies; i++) {
-            this.hD.addHuman(new Human("A" + this.rng.nextInt(1000)));
+            int value = rng.nextInt(25) + 65;
+            char letter = (char) value;
+            this.hD.addHuman(new Human(letter + "-" + this.rng.nextInt(1000)));
         }
         year++;
 //      Print out for testing, in case UI doesn't work
@@ -126,24 +160,35 @@ public class Logic {
 
     private void calculateHappiness(boolean foodIsOut) {
         double amountOfPeople = this.hD.getList().size();
+        double change = 0;
         if (foodIsOut) {
-            this.happiness -= 10;
+            change -= 5;
         } else if (resources[0] > amountOfPeople) {
-            this.happiness += 5;
+            change += 2;
         }
-        this.happiness += ((resources[1] / amountOfPeople) - 1);
-        this.happiness += (resources[2] - year * 2);
+        change += ((resources[1] / amountOfPeople) - 1);
+        change += Math.max(resources[2] - year * 2, -0.2);
         if (this.hD.getListOfWorkersAtPlace(Factories.ARMY).size() > amountOfPeople * 0.2) {
-            this.happiness += -5;
+            change += -5;
         }
+        change = Math.max(-5, change);
+        change = Math.min(5, change);
+        this.happiness += change;
         this.happiness = Math.max(0, happiness);
         this.happiness = Math.min(100, happiness);
-
     }
 
     public double getHappiness() {
         double temp = Math.round(happiness * 10);
         temp /= 10;
         return temp;
+    }
+
+    public HumanDistributor gethD() {
+        return hD;
+    }
+
+    public String getGuideText() {
+        return this.operator.getGuideText();
     }
 }

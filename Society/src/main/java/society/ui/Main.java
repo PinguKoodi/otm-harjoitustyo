@@ -5,6 +5,7 @@
  */
 package society.ui;
 
+import javafx.scene.input.KeyEvent;
 import society.domain.HumanDistributor;
 import society.domain.Logic;
 import javafx.application.Application;
@@ -19,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -43,12 +45,11 @@ public class Main extends Application {
     public void init() throws Exception {
         this.hD = new HumanDistributor();
         this.logic = new Logic(hD);
-        this.logic.createFirstHumans();
 
     }
 
     @Override
-    public void start(Stage window) {
+    public void start(Stage window2) {
         GridPane startSet = new GridPane();
         startSet.setMinWidth(150);
         startSet.setVgap(20);
@@ -59,32 +60,70 @@ public class Main extends Application {
         bGBtn.setAlignment(Pos.CENTER_RIGHT);
         startSet.add(bGBtn, 0, 0);
         Button exitGame = new Button("Exit game");
-        startSet.add(exitGame, 0, 2);
+        startSet.add(exitGame, 0, 3);
         Button loadGame = new Button("Load game");
-//        startSet.add(loadGame, 0, 1);
-        
-        
-        
+        startSet.add(loadGame, 0, 1);
+        Button help = new Button("Game guide");
+        startSet.add(help, 0, 2);
         Scene start = new Scene(startSet);
-        
+        beginGame.setOnAction((event) -> {
+            this.logic.startGame(false);
+            gameWindow();
+            window2.close();
+        });
+        exitGame.setOnAction((event) -> {
+            window2.close();
+        });
+        loadGame.setOnAction((event) -> {
+            this.logic.startGame(true);
+            gameWindow();
+            window2.close();
+        });
+        help.setOnAction((event) -> {
+            gameGuideWindow();
+        });
+        window2.setScene(start);
+        window2.show();
+    }
+
+    private void gameGuideWindow() {
+        Stage guideWindow = new Stage();
+        guideWindow.setTitle("Guide for noobs");
+        VBox guide = new VBox();
+        Button closeGuide = new Button("Close guide"); 
+        closeGuide.setOnAction((event) -> {
+            guideWindow.close();
+        });
+        Text guideText = new Text();
+        guideText.setText(this.logic.getGuideText());
+        guide.getChildren().add(guideText);
+        guide.getChildren().add(closeGuide);
+        Scene guideScene = new Scene(guide);
+        guideWindow.setScene(guideScene);
+        guideWindow.show();
+    }
+
+    private void gameWindow() {
+        Stage window = new Stage();
+        window.setTitle("Society");
         int[] workers = this.hD.getNumberOfWorkers();
         double[] resources = this.logic.getResourcesDisplay();
         GridPane setting = new GridPane();
         setting.setVgap(20);
         setting.setHgap(20);
         setting.setPadding(new Insets(25, 25, 25, 25));
-        Label farmers = new Label("Farmers:" + workers[0]);
-        Label workersL = new Label("Workers:" + workers[1]);
-        Label scientists = new Label("Scientists:" + workers[2]);
-        Label soldiers = new Label("Soldiers:" + workers[3]);
+        Label farmers = new Label("Farmers: " + workers[0]);
+        Label workersL = new Label("Workers: " + workers[1]);
+        Label scientists = new Label("Scientists: " + workers[2]);
+        Label soldiers = new Label("Soldiers: " + workers[3]);
         setting.add(farmers, 1, 1);
         setting.add(workersL, 1, 3);
         setting.add(scientists, 3, 1);
         setting.add(soldiers, 3, 3);
-        Label foodTools = new Label("Food:" + resources[0]);
-        Label tools = new Label("Tools:" + resources[1]);
-        Label scienceGuns = new Label("Science:" + resources[2]);
-        Label guns = new Label("Guns:" + resources[3]);
+        Label foodTools = new Label("Food: " + resources[0]);
+        Label tools = new Label("Tools: " + resources[1]);
+        Label scienceGuns = new Label("Science: " + resources[2]);
+        Label guns = new Label("Guns: " + resources[3]);
         foodTools.setMinWidth(100);
         tools.setMinWidth(100);
         scienceGuns.setMinWidth(100);
@@ -104,10 +143,15 @@ public class Main extends Application {
         setting.add(children, 3, 5);
         Label happiness = new Label("Happiness: " + this.logic.getHappiness());
         setting.add(happiness, 4, 5);
-        Button btn = new Button("End Turn");
+        Button endTurn = new Button("End Turn");
         HBox hbBtn = new HBox(10);
-        hbBtn.getChildren().add(btn);
+        hbBtn.getChildren().add(endTurn);
         setting.add(hbBtn, 4, 6);
+        Button saveGame = new Button("Save game");
+        setting.add(saveGame, 2, 6);
+        saveGame.setOnAction((event) -> {
+            this.logic.saveToFile();
+        });
 
         Button farmB = new Button("Assing to Farm");
         HBox hFarmB = new HBox(10);
@@ -161,11 +205,16 @@ public class Main extends Application {
             humanList.setScene(listScene);
             humanList.show();
         });
-        
+
         BorderPane setting2 = new BorderPane();
-        setting2.setMinSize(50,50);
+        setting2.setMinSize(50, 50);
         setting2.setTop(new Label("You have lost"));
-        
+        Button endGameOnGameScreen = new Button("Exit game");
+        endGameOnGameScreen.setOnAction((event) -> {
+            window.close();
+        });
+        setting.add(endGameOnGameScreen, 3, 6);
+
         Button endGame = new Button("Exit game");
         endGame.setOnAction((event) -> {
             window.close();
@@ -175,28 +224,20 @@ public class Main extends Application {
         setting2.setBottom(endGame);
         Scene view2 = new Scene(setting2);
         Scene view = new Scene(setting);
-        beginGame.setOnAction((event) -> {
-            window.setScene(view);
-        });
-        exitGame.setOnAction((event) -> {
-            window.close();
-        });
-        loadGame.setOnAction((event) -> {
-            
-        });
-        
-        btn.setOnAction((event) -> {
+        window.setScene(view);
+
+        endTurn.setOnAction((event) -> {
             if (this.logic.endTurn()) {
                 setting2.setCenter(new Label("You got in total " + this.logic.getResourcesDisplay()[2] + " science points and your reign lasted for "
-                + this.logic.getYear() + " years."));
+                        + this.logic.getYear() + " years."));
                 window.setScene(view2);
             }
             int[] workers1 = this.hD.getNumberOfWorkers();
             double[] resources1 = this.logic.getResourcesDisplay();
-            foodTools.setText("Food:" + resources1[0]);
-            tools.setText("Tools:" + resources1[1]);
-            scienceGuns.setText("Science:" + resources1[2]);
-            guns.setText("Guns:" + resources1[3]);
+            foodTools.setText("Food: " + resources1[0]);
+            tools.setText("Tools: " + resources1[1]);
+            scienceGuns.setText("Science: " + resources1[2]);
+            guns.setText("Guns: " + resources1[3]);
             farmers.setText("Farmers: " + workers1[0]);
             workersL.setText("Workers: " + workers1[1]);
             scientists.setText("Scientists: " + workers1[2]);
@@ -206,9 +247,15 @@ public class Main extends Application {
             children.setText("Children: " + this.hD.numberOfChilds());
             happiness.setText("Happiness: " + this.logic.getHappiness());
         });
-        window.setScene(start);
+
+        view.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    endTurn.fire();
+                }
+            }
+        });
         window.show();
-        
     }
 
     public static void main(String[] args) {

@@ -7,6 +7,7 @@ package society.domain;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -63,6 +64,17 @@ public class HumanDistributor {
             }
         }
         return workerList;
+    }
+
+    public int makeBabies() {
+        int rightAged = 0;
+        for (Human h : this.list) {
+            if (h.getAge() < 45 && h.getAge() > 18) {
+                rightAged++;
+            }
+        }
+        rightAged /= 2;
+        return Math.max(1, rightAged);
     }
 
     public Map<Human, Factories> getWorkPlaces() {
@@ -160,5 +172,8 @@ public class HumanDistributor {
             }
         }
         return display;
+    }
+    public void sortHumansByAge() {
+        Collections.sort(this.list);
     }
 }
