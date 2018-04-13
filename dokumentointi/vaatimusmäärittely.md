@@ -6,7 +6,7 @@ Tarkoituksena on tehdä yksinkertainen vuoropohjainen strategiapeli, jossa pelaa
 ## Luonnos käyttöliittymästä
 Lopullinen peli tulee olemaan englanniksi
 
-![kuva](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/grafiikat/Yhteiskunta_UI.png)
+![kuva](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/Grafiikat/Yhteiskunta_UI.png)
 
 Pelissä tulee myös olemaan aloitusikkuna, jossa on mahdollisuus ladata pelitiedosto, tai aloittaa uusi peli
 
