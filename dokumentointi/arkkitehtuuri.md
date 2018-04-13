@@ -5,4 +5,4 @@ Ohjelmassa on kaksitasoinen kerrosarkkitehtuuri, jossa pakkaus society.ui sisäl
 
 ## Luokkakaavio
 Alustava luokkakaavio
-<img src="https://github.com/PinguKoodi/otm-harjoitustyo/tree/master/dokumentointi/grafiikat/SocietyClassDiagram.png"/>
+<img src="https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/Grafiikat/SocietyClassDiagram.png"/>
