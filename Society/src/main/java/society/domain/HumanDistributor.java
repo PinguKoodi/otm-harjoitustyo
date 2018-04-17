@@ -143,9 +143,9 @@ public class HumanDistributor {
         List<Human> toBeKilled = new ArrayList();
         for (Human h : this.list) {
             h.growOlder();
-            if (h.getAge() > 70) {
+            if (h.getAge() > 80) {
                 Random r = new Random();
-                if (r.nextInt(30) + h.getAge() > 100) {
+                if (r.nextInt(20) + h.getAge() > 100) {
                     toBeKilled.add(h);
                     this.workPlaces.remove(h);
                 }
