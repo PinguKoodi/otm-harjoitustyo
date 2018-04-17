@@ -15,6 +15,7 @@ import java.util.Scanner;
 import society.domain.Factories;
 import society.domain.Human;
 import society.domain.Logic;
+import society.ui.Main;
 
 /**
  *
@@ -28,26 +29,33 @@ public class FileOperator {
     private File config;
     private Properties properties;
     private File guide;
-
+    private String dataString;
+    private String humanString;
+    
     public FileOperator(Logic logic) {
         this.l = logic;
         try {
-            config = new File("src/main/resources/config.txt");
+            config = new File("src/main/resources/files/config.txt");
             properties = new Properties();
-            properties.load(new FileInputStream(this.config));
-            String dataString = properties.getProperty("firstValues");
-            this.data = new File("src/main/resources/"+dataString);
-            String humansString = properties.getProperty("firstHumans");
-            this.humans = new File("src/main/resources/"+humansString);
-            this.guide = new File("src/main/resources/"+properties.getProperty("guide"));
+            properties.load(this.getClass().getResourceAsStream("/files/config.txt"));
+            dataString = properties.getProperty("firstValues");
+            this.data = new File(this.getClass().getResource("/files/" + dataString).toURI());
+            humanString = properties.getProperty("firstHumans");
+            this.humans = new File(this.getClass().getResource("/files/" + humanString).toURI());
         } catch (Exception e) {
 
         }
     }
 
     public void switchToLoadFromSave() {
-        this.data = new File("src/main/resources/"+properties.getProperty("data"));
-        this.humans = new File("src/main/resources/"+properties.getProperty("humans"));
+        try {
+            dataString = properties.getProperty("data");
+            humanString = properties.getProperty("humans");
+            this.data = new File(this.getClass().getResource("/files/" + dataString).toURI());
+            this.humans = new File(this.getClass().getResource("/files/" + humanString).toURI());
+        } catch (Exception e) {
+
+        }
 
     }
 
@@ -84,7 +92,7 @@ public class FileOperator {
     public double[] readValuesFromFile() {
         double[] table = new double[6];
         try {
-            Scanner reader = new Scanner(data);
+            Scanner reader = new Scanner(this.getClass().getResourceAsStream("/files/" + dataString));
             String[] line = reader.nextLine().split(";");
             for (int i = 0; i < line.length; i++) {
                 table[i] = Double.parseDouble(line[i]);
@@ -98,7 +106,7 @@ public class FileOperator {
     public Map<Human, Factories> readHumansFromFile() {
         Map<Human, Factories> map = new HashMap();
         try {
-            Scanner reader = new Scanner(humans);
+            Scanner reader = new Scanner(this.getClass().getResourceAsStream("/files/" + humanString));
             while (reader.hasNext()) {
                 String[] line = reader.nextLine().split(";");
                 if (line[3].equals("null")) {
@@ -116,7 +124,7 @@ public class FileOperator {
     public String getGuideText() {
         String text = "";
         try {
-            Scanner reader = new Scanner(guide);
+            Scanner reader = new Scanner(this.getClass().getResourceAsStream("/files/guide.txt"));
             while (reader.hasNext()) {
                 text += reader.nextLine() + "\n";
             }

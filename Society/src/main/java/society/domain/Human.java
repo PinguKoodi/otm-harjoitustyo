@@ -9,7 +9,7 @@ package society.domain;
  *
  * @author pyylauri
  */
-public class Human implements Comparable<Human>{
+public class Human implements Comparable<Human> {
 
     private String name;
     private int age;
@@ -70,9 +70,9 @@ public class Human implements Comparable<Human>{
     public String getFileString() {
         return this.name + ";" + this.age + ";" + this.experience;
     }
-    
+
     @Override
     public int compareTo(Human h) {
-        return -this.age+h.getAge();
+        return -this.age + h.getAge();
     }
 }

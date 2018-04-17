@@ -55,8 +55,11 @@ public class Logic {
         if (loadedGame) {
             operator.switchToLoadFromSave();
         }
-        //this.loadHumans();
-        this.createFirstHumans();
+        this.loadHumans();
+        if (this.hD.getList().isEmpty()) { //Fail-safe is loading doesn't work
+            this.createFirstHumans();
+        }
+//        this.createFirstHumans();
 
     }
 
@@ -192,12 +195,13 @@ public class Logic {
     public String getGuideText() {
         return this.operator.getGuideText();
     }
+
     public void createFirstHumans() {
-        for(int i = 0;i<15;i++) {
-            if(i<10) {
-                this.hD.setHumanFactory(new Human("Firstborn"+i, 20 +i,10+i), Factories.FARM);
+        for (int i = 0; i < 15; i++) {
+            if (i < 10) {
+                this.hD.setHumanFactory(new Human("Firstborn" + i, 20 + i, 10 + i), Factories.FARM);
             } else {
-                this.hD.addHuman(new Human("Firstborn"+i, 20 +i));
+                this.hD.addHuman(new Human("Firstborn" + i, 20 + i));
             }
         }
     }
