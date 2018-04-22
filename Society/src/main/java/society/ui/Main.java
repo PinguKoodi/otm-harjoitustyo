@@ -40,6 +40,22 @@ public class Main extends Application {
 
     private Logic logic;
     private HumanDistributor hD;
+    private Label farmers;
+    private Label workersL;
+    private Label scientists;
+    private Label soldiers;
+    private Label foodTools;
+    private Label tools;
+    private Label scienceGuns;
+    private Label guns;
+    private Label yearL;
+    private Label unemployed;
+    private Label children;
+    private Label happiness;
+    private Label foodProd;
+    private Label toolProd;
+    private Label scienceProd;
+    private Label gunProd;
 
     @Override
     public void init() throws Exception {
@@ -90,7 +106,7 @@ public class Main extends Application {
         Stage guideWindow = new Stage();
         guideWindow.setTitle("Guide for noobs");
         VBox guide = new VBox();
-        Button closeGuide = new Button("Close guide"); 
+        Button closeGuide = new Button("Close guide");
         closeGuide.setOnAction((event) -> {
             guideWindow.close();
         });
@@ -106,43 +122,30 @@ public class Main extends Application {
     private void gameWindow() {
         Stage window = new Stage();
         window.setTitle("Society");
-        int[] workers = this.hD.getNumberOfWorkers();
-        double[] resources = this.logic.getResourcesDisplay();
+        initializeLabels();
         GridPane setting = new GridPane();
         setting.setVgap(20);
         setting.setHgap(20);
         setting.setPadding(new Insets(25, 25, 25, 25));
-        Label farmers = new Label("Farmers: " + workers[0]);
-        Label workersL = new Label("Workers: " + workers[1]);
-        Label scientists = new Label("Scientists: " + workers[2]);
-        Label soldiers = new Label("Soldiers: " + workers[3]);
         setting.add(farmers, 1, 1);
         setting.add(workersL, 1, 3);
         setting.add(scientists, 3, 1);
         setting.add(soldiers, 3, 3);
-        Label foodTools = new Label("Food: " + resources[0]);
-        Label tools = new Label("Tools: " + resources[1]);
-        Label scienceGuns = new Label("Science: " + resources[2]);
-        Label guns = new Label("Guns: " + resources[3]);
-        foodTools.setMinWidth(100);
-        tools.setMinWidth(100);
-        scienceGuns.setMinWidth(100);
-        guns.setMinWidth(100);
+        setting.add(children, 3, 5);
+        setting.add(unemployed, 2, 5);
+        setting.add(yearL, 1, 5);
+        setting.add(happiness, 4, 5);
         setting.add(foodTools, 1, 0);
         setting.add(tools, 2, 0);
         setting.add(scienceGuns, 3, 0);
         setting.add(guns, 4, 0);
+        setting.add(foodProd, 1, 0);
+        setting.add(toolProd, 2, 0);
+        setting.add(scienceProd, 3, 0);
+        setting.add(gunProd, 4, 0);
 //        setting.add(new Label("Tools:" + this.logic.getResources()[1]), 2, 0);
 //        setting.add(new Label("Science:" + this.logic.getResources()[2]), 3, 0);
 //        setting.add(new Label("Guns:" + this.logic.getResources()[3]), 4, 0);
-        Label yearL = new Label("Year: " + this.logic.getYear());
-        setting.add(yearL, 1, 5);
-        Label unemployed = new Label("Unemployed: " + this.hD.numberOfUnemployed());
-        setting.add(unemployed, 2, 5);
-        Label children = new Label("Children: " + this.hD.numberOfChilds());
-        setting.add(children, 3, 5);
-        Label happiness = new Label("Happiness: " + this.logic.getHappiness());
-        setting.add(happiness, 4, 5);
         Button endTurn = new Button("End Turn");
         HBox hbBtn = new HBox(10);
         hbBtn.getChildren().add(endTurn);
@@ -159,27 +162,23 @@ public class Main extends Application {
         setting.add(hFarmB, 1, 2);
         farmB.setOnAction((event) -> {
             logic.assignWorker(Factories.FARM);
-            farmers.setText("Farmers: " + this.hD.getNumberOfWorkers()[0]);
-            unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
+            updateInfo();
         });
-
         Button factoryB = new Button("Assing to Factory");
         HBox hFactoryB = new HBox(10);
         hFactoryB.getChildren().add(factoryB);
         setting.add(hFactoryB, 1, 4);
         factoryB.setOnAction((event) -> {
             logic.assignWorker(Factories.FACTORY);
-            workersL.setText("Workers: " + this.hD.getNumberOfWorkers()[1]);
-            unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
+            updateInfo();
         });
-        Button laboratoryB = new Button("Assing to Laboratory");
+        Button laboratoryB = new Button("Assing to Lab");
         HBox hLaboratoryB = new HBox(10);
         hLaboratoryB.getChildren().add(laboratoryB);
         setting.add(hLaboratoryB, 3, 2);
         laboratoryB.setOnAction((event) -> {
             logic.assignWorker(Factories.LABORATORY);
-            scientists.setText("Scientists: " + this.hD.getNumberOfWorkers()[2]);
-            unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
+            updateInfo();
         });
 
         Button armyB = new Button("Assing to Army");
@@ -188,8 +187,7 @@ public class Main extends Application {
         setting.add(hArmyB, 3, 4);
         armyB.setOnAction((event) -> {
             logic.assignWorker(Factories.ARMY);
-            soldiers.setText("Soldiers: " + this.hD.getNumberOfWorkers()[3]);
-            unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
+            updateInfo();
         });
         Button showHumans = new Button("Human overview");
         setting.add(showHumans, 1, 6);
@@ -232,20 +230,8 @@ public class Main extends Application {
                         + this.logic.getYear() + " years."));
                 window.setScene(view2);
             }
-            int[] workers1 = this.hD.getNumberOfWorkers();
-            double[] resources1 = this.logic.getResourcesDisplay();
-            foodTools.setText("Food: " + resources1[0]);
-            tools.setText("Tools: " + resources1[1]);
-            scienceGuns.setText("Science: " + resources1[2]);
-            guns.setText("Guns: " + resources1[3]);
-            farmers.setText("Farmers: " + workers1[0]);
-            workersL.setText("Workers: " + workers1[1]);
-            scientists.setText("Scientists: " + workers1[2]);
-            soldiers.setText("Soldiers: " + workers1[3]);
-            yearL.setText("Year: " + this.logic.getYear());
-            unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
-            children.setText("Children: " + this.hD.numberOfChilds());
-            happiness.setText("Happiness: " + this.logic.getHappiness());
+            updateInfo();
+
         });
 
         view.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -256,6 +242,73 @@ public class Main extends Application {
             }
         });
         window.show();
+    }
+
+    private void updateInfo() {
+        int[] workers1 = this.hD.getNumberOfWorkers();
+        double[] resources1 = this.logic.getResourcesDisplay();
+        double[] prods = this.logic.getProductionDisplay();
+        foodTools.setText("Food: " + resources1[0]);
+        tools.setText("Tools: " + resources1[1]);
+        scienceGuns.setText("Science: " + resources1[2]);
+        guns.setText("Guns: " + resources1[3]);
+        farmers.setText("Farmers: " + workers1[0]);
+        workersL.setText("Workers: " + workers1[1]);
+        scientists.setText("Scientists: " + workers1[2]);
+        soldiers.setText("Soldiers: " + workers1[3]);
+        yearL.setText("Year: " + this.logic.getYear());
+        unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
+        children.setText("Children: " + this.hD.numberOfChilds());
+        happiness.setText("Happiness: " + this.logic.getHappiness());
+        if (prods[0] < 0) {
+            foodProd.setText("(" + prods[0] + ")");
+            foodProd.setTextFill(Color.web("FF0000"));
+        } else {
+            foodProd.setText("(+" + (prods[0]) + ")");
+            foodProd.setTextFill(Color.web("00CC00"));
+        }
+        toolProd.setText("(+" + prods[1] + ")");
+        scienceProd.setText("(+" + prods[2] + ")");
+        gunProd.setText("(+" + prods[3] + ")");
+    }
+
+    private void initializeLabels() {
+        int[] workers = this.hD.getNumberOfWorkers();
+        double[] resources = this.logic.getResourcesDisplay();
+        double[] prods = this.logic.getProductionDisplay();
+        farmers = new Label("Farmers: " + workers[0]);
+        workersL = new Label("Workers: " + workers[1]);
+        scientists = new Label("Scientists: " + workers[2]);
+        soldiers = new Label("Soldiers: " + workers[3]);
+        foodTools = new Label("Food: " + resources[0]);
+        tools = new Label("Tools: " + resources[1]);
+        scienceGuns = new Label("Science: " + resources[2]);
+        guns = new Label("Guns: " + resources[3]);
+        yearL = new Label("Year: " + this.logic.getYear());
+        unemployed = new Label("Unemployed: " + this.hD.numberOfUnemployed());
+        children = new Label("Children: " + this.hD.numberOfChilds());
+        happiness = new Label("Happiness: " + this.logic.getHappiness());
+        foodProd = new Label("(+" + (prods[0]) + ")");
+        toolProd = new Label("(+" + prods[1] + ")");
+        scienceProd = new Label("(+" + prods[2] + ")");
+        gunProd = new Label("(+" + prods[3] + ")");
+        if (prods[0] < 0) {
+            foodProd.setText("(" + prods[0] + ")");
+            foodProd.setTextFill(Color.web("FF0000"));
+        } else {
+            foodProd.setTextFill(Color.web("00CC00"));
+        }
+        foodProd.setTranslateX(70.0);
+        toolProd.setTextFill(Color.web("00CC00"));
+        toolProd.setTranslateX(70.0);
+        scienceProd.setTextFill(Color.web("00CC00"));
+        scienceProd.setTranslateX(70.0);
+        gunProd.setTextFill(Color.web("00CC00"));
+        gunProd.setTranslateX(70.0);
+        foodTools.setMinWidth(100);
+        tools.setMinWidth(100);
+        scienceGuns.setMinWidth(100);
+        guns.setMinWidth(100);
     }
 
     public static void main(String[] args) {

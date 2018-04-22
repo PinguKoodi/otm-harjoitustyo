@@ -99,19 +99,12 @@ public class Logic {
 
     public boolean endTurn() {
         int adults = this.hD.numberOfAdults();
-//        List<Human> listOfWorkers = this.hD.getListOfWorkers();
-//        for(Human h: listOfWorkers) { 
-//        }
-//Vaihtoehtoinen ratkaisu
         boolean foodIsOut = this.resources[0] < 0;
         int[] numberOfWorkers = this.hD.getNumberOfWorkers();
+        double[] prods = this.getProduction();
         for (int i = 0; i < 4; i++) {
-            if (numberOfWorkers[i] > 0) {
-                double multiplier = this.mult.getMultiplier(i);
-                this.resources[i] = this.resources[i] + (numberOfWorkers[i] * multiplier);
-            }
+            this.resources[i] += prods[i];
         }
-        this.resources[0] = this.resources[0] - this.hD.getList().size();
         calculateHappiness(foodIsOut);
         if (foodIsOut && this.resources[0] < 0) {
             this.hD.kill(this.resources[0]);
@@ -120,20 +113,8 @@ public class Logic {
             return true;
         }
         this.hD.makeOneYearOlder();
-        double babiesValue = rng.nextInt(this.hD.makeBabies()) * 0.7;
-        int babies = (int) babiesValue;
-        for (int i = 0; i < babies; i++) {
-            int value = rng.nextInt(25) + 65;
-            char letter = (char) value;
-            this.hD.addHuman(new Human(letter + "-" + this.rng.nextInt(1000)));
-        }
+        this.makeBabies(prods[0]);
         year++;
-//      Print out for testing, in case UI doesn't work
-//        for (int i = 0; i < 4; i++) {
-
-//            System.out.println(i + ". " + "Workers: " + numberOfWorkers[i] + ", Storage: " + resources[i]);
-//        }
-//        System.out.println("Year " + year + "   Unemployed: " + this.hD.numberOfUnemployed() + "Children " + this.hD.numberOfChilds());
         return false;
     }
 
@@ -146,12 +127,7 @@ public class Logic {
     }
 
     public double[] getResourcesDisplay() {
-        double[] trimmed = new double[4];
-        for (int i = 0; i < 4; i++) {
-            trimmed[i] = Math.round(this.resources[i] * 10);
-            trimmed[i] = trimmed[i] / 10;
-        }
-        return trimmed;
+        return trimDoubleArray(this.resources);
     }
 
     public int getYear() {
@@ -179,7 +155,7 @@ public class Logic {
         change = Math.min(5, change);
         this.happiness += change;
         this.happiness = Math.max(0, happiness);
-        this.happiness = Math.min(100, happiness);
+        this.happiness = Math.min(120, happiness);
     }
 
     public double getHappiness() {
@@ -205,4 +181,45 @@ public class Logic {
             }
         }
     }
+
+    public double[] getProduction() {
+        double[] prods = new double[4];
+        double[] multipliers = this.mult.getAllMultipliers();
+        int[] workers = this.hD.getNumberOfWorkers();
+        for (int i = 0; i < 4; i++) {
+            double production = workers[i] * multipliers[i];
+            if (i == 0) {
+                production -= this.hD.getPopulation();
+            }
+            prods[i] = production;
+        }
+        return prods;
+    }
+
+    public double[] getProductionDisplay() {
+        return trimDoubleArray(this.getProduction());
+    }
+
+    public double[] trimDoubleArray(double[] array) {
+        double[] trimmed = new double[array.length];
+        for (int i = 0; i < array.length; i++) {
+            trimmed[i] = Math.round(array[i] * 10);
+            trimmed[i] = trimmed[i] / 10;
+        }
+        return trimmed;
+    }
+
+    private void makeBabies(double foodProd) {
+        double babiesValue = rng.nextInt(this.hD.amountOfBabies()) * 0.7;
+        if (foodProd < 0.0) {
+            babiesValue /= 2;
+        }
+        int babies = (int) babiesValue;
+        for (int i = 0; i < babies; i++) {
+            int value = rng.nextInt(25) + 65;
+            char letter = (char) value;
+            this.hD.addHuman(new Human(letter + "-" + this.rng.nextInt(1000)));
+        }
+    }
+
 }

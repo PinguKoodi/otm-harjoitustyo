@@ -66,7 +66,7 @@ public class HumanDistributor {
         return workerList;
     }
 
-    public int makeBabies() {
+    public int amountOfBabies() {
         int rightAged = 0;
         for (Human h : this.list) {
             if (h.getAge() < 45 && h.getAge() > 18) {
@@ -173,6 +173,7 @@ public class HumanDistributor {
         }
         return display;
     }
+
     public void sortHumansByAge() {
         Collections.sort(this.list);
     }

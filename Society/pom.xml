@@ -23,11 +23,7 @@
         <resources>
             <resource>
                 <directory>src/main/resources/</directory>
-                <filtering>false</filtering>
-                <excludes>
-                    <exclude>saveData.txt</exclude>
-                    <exclude>saveHumans.txt</exclude>
-                </excludes>
+                <filtering>true</filtering>
             </resource>
         </resources>
         <plugins>
@@ -35,11 +31,6 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.0</version>
-                <configuration>
-                    <excludes>
-                        <exclude>society/ui/*</exclude>
-                    </excludes>
-                </configuration>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>
@@ -48,6 +39,11 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>society/ui/*</exclude>
+                    </excludes>
+                </configuration>
             </plugin> 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

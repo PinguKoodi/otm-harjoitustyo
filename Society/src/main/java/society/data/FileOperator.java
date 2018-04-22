@@ -5,9 +5,13 @@
  */
 package society.data;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -31,7 +35,7 @@ public class FileOperator {
     private File guide;
     private String dataString;
     private String humanString;
-    
+
     public FileOperator(Logic logic) {
         this.l = logic;
         try {
@@ -43,7 +47,7 @@ public class FileOperator {
             humanString = properties.getProperty("firstHumans");
             this.humans = new File(this.getClass().getResource("/files/" + humanString).toURI());
         } catch (Exception e) {
-
+            System.out.println("ErrorStart");
         }
     }
 
@@ -53,17 +57,18 @@ public class FileOperator {
             humanString = properties.getProperty("humans");
             this.data = new File(this.getClass().getResource("/files/" + dataString).toURI());
             this.humans = new File(this.getClass().getResource("/files/" + humanString).toURI());
+            data.createNewFile();
+            humans.createNewFile();
         } catch (Exception e) {
-
+            System.out.println("ErrorSwitch");
         }
 
     }
 
     public void saveValuesToFile() {
         try {
-            data.createNewFile();
-            humans.createNewFile();
-            FileWriter fileW = new FileWriter(data);
+
+            Writer fileW = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(data), "UTF-8"));
             String toBeWrited = "";
             for (int i = 0; i < 4; i++) {
                 toBeWrited += this.l.getResourcesDisplay()[i] + ";";
@@ -72,11 +77,13 @@ public class FileOperator {
             fileW.write(toBeWrited);
             fileW.close();
         } catch (Exception e) {
+            System.out.println("ErrorSvaeValues");
         }
     }
 
     public void saveHumansToFile() {
         try {
+            humans.createNewFile();
             FileWriter fw = new FileWriter(humans);
             String toBeWrited = "";
             for (Human h : this.l.gethD().getList()) {
@@ -85,7 +92,7 @@ public class FileOperator {
             fw.write(toBeWrited);
             fw.close();
         } catch (Exception e) {
-
+            System.out.println("ErrorSaveHumans");
         }
     }
 
