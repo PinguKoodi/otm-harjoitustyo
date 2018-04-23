@@ -66,7 +66,7 @@ public class HumanDistributor {
         return workerList;
     }
 
-    public int amountOfBabies() {
+    public int amountOfReproducablePeople() {
         int rightAged = 0;
         for (Human h : this.list) {
             if (h.getAge() < 45 && h.getAge() > 18) {
@@ -86,17 +86,13 @@ public class HumanDistributor {
         for (Human h : this.workPlaces.keySet()) {
             if (null != this.workPlaces.get(h)) {
                 switch (this.workPlaces.get(h)) {
-                    case FARM:
-                        workerAmounts[0] = workerAmounts[0] + 1;
+                    case FARM: workerAmounts[0] = workerAmounts[0] + 1;
                         break;
-                    case FACTORY:
-                        workerAmounts[1] = workerAmounts[1] + 1;
+                    case FACTORY: workerAmounts[1] = workerAmounts[1] + 1;
                         break;
-                    case LABORATORY:
-                        workerAmounts[2] = workerAmounts[2] + 1;
+                    case LABORATORY: workerAmounts[2] = workerAmounts[2] + 1;
                         break;
-                    case ARMY:
-                        workerAmounts[3] = workerAmounts[3] + 1;
+                    case ARMY: workerAmounts[3] = workerAmounts[3] + 1;
                         break;
                     default:
                         break;
@@ -164,6 +160,7 @@ public class HumanDistributor {
 
     public String getHumansDisplay() {
         String display = new String();
+        display += ("Total population: " + this.list.size() + "\n");
         for (Human h : this.list) {
             if (this.workPlaces.get(h) != null) {
                 display += h.toString() + ", " + this.workPlaces.get(h).toString() + "\n";

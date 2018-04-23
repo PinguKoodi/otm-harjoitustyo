@@ -4,8 +4,6 @@
  * and open the template in the editor.
  */
 package society.domain;
-
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -29,8 +27,8 @@ public class Logic {
         this.hD = hD;
         this.resources = new double[4];
         this.resources[0] = 100;
-        for (int i = 1; i < 4; i++) {
-            this.resources[i] = 0;
+        for (int i = 1; i < 4; i++) { 
+            this.resources[i] = 0; 
         }
         this.year = 0;
         this.rng = new Random();
@@ -40,18 +38,6 @@ public class Logic {
     }
 
     public void startGame(boolean loadedGame) {
-//        for (int i = 0; i < 12; i++) {
-//            Human h = new Human("A-" + i, 18 + i);
-//            if (i % 2 == 0) {
-//                this.hD.setHumanFactory(h, Factories.FARM);
-//            } else {
-//                this.hD.addHuman(h);
-//            }
-//        }
-//        this.hD.addHuman(new Human("D-503", 20));
-//        this.hD.addHuman(new Human("I-330", 20));
-//        this.hD.addHuman(new Human("O-90", 20));
-//        this.hD.addHuman(new Human("U-180", 20));
         if (loadedGame) {
             operator.switchToLoadFromSave();
         }
@@ -60,7 +46,7 @@ public class Logic {
             this.createFirstHumans();
         }
 //        this.createFirstHumans();
-
+        operator.switchToLoadFromSave();
     }
 
     public void loadHumans() {
@@ -82,7 +68,7 @@ public class Logic {
             }
         }
         this.hD.sortHumansByAge();
-        operator.switchToLoadFromSave();
+
     }
 
     public void assignWorker(Factories f) {
@@ -93,18 +79,16 @@ public class Logic {
     }
 
     public void saveToFile() {
-        operator.saveValuesToFile();
-        operator.saveHumansToFile();
+        operator.saveToFile();
     }
 
     public boolean endTurn() {
-        int adults = this.hD.numberOfAdults();
         boolean foodIsOut = this.resources[0] < 0;
-        int[] numberOfWorkers = this.hD.getNumberOfWorkers();
         double[] prods = this.getProduction();
         for (int i = 0; i < 4; i++) {
             this.resources[i] += prods[i];
         }
+        calculateResourceLoss();
         calculateHappiness(foodIsOut);
         if (foodIsOut && this.resources[0] < 0) {
             this.hD.kill(this.resources[0]);
@@ -190,6 +174,9 @@ public class Logic {
             double production = workers[i] * multipliers[i];
             if (i == 0) {
                 production -= this.hD.getPopulation();
+            } else if (i == 1) {
+                production -= this.hD.getListOfWorkersAtPlace(Factories.FARM).size() * 0.10;
+                production = Math.max(production, 0);
             }
             prods[i] = production;
         }
@@ -209,8 +196,9 @@ public class Logic {
         return trimmed;
     }
 
-    private void makeBabies(double foodProd) {
-        double babiesValue = rng.nextInt(this.hD.amountOfBabies()) * 0.7;
+    private int makeBabies(double foodProd) {
+        int amountOfMothers = this.hD.amountOfReproducablePeople();
+        double babiesValue = rng.nextInt(Math.max(1, (int) Math.log(amountOfMothers)) * 3);
         if (foodProd < 0.0) {
             babiesValue /= 2;
         }
@@ -218,8 +206,30 @@ public class Logic {
         for (int i = 0; i < babies; i++) {
             int value = rng.nextInt(25) + 65;
             char letter = (char) value;
-            this.hD.addHuman(new Human(letter + "-" + this.rng.nextInt(1000)));
+            this.hD.addHuman(new Human(letter + "-" + this.rng.nextInt(10000)));
+        }
+        return babies;
+    }
+
+    private void calculateResourceLoss() {
+        int soldiers = this.hD.getListOfWorkersAtPlace(Factories.ARMY).size();
+        int resourceSum = 0;
+        for (int i = 0; i < 4; i++) {
+            resourceSum += resources[i];
+        }
+        resourceSum /= 1000;
+        if (resourceSum > soldiers) {
+            for (int i = 0; i < 4; i++) {
+                resources[i] = resources[i] * 0.95;
+            }
         }
     }
 
+    public String getWorkplaceAsString(Human h) {
+        if (this.hD.getWorkPlaces().get(h) == null) {
+            return "null";
+        } else {
+            return this.hD.getWorkPlaces().get(h).toString();
+        }
+    }
 }

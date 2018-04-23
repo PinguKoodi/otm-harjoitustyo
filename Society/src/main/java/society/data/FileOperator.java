@@ -12,7 +12,14 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
@@ -39,13 +46,12 @@ public class FileOperator {
     public FileOperator(Logic logic) {
         this.l = logic;
         try {
-            config = new File("src/main/resources/files/config.txt");
             properties = new Properties();
             properties.load(this.getClass().getResourceAsStream("/files/config.txt"));
             dataString = properties.getProperty("firstValues");
             this.data = new File(this.getClass().getResource("/files/" + dataString).toURI());
-            humanString = properties.getProperty("firstHumans");
-            this.humans = new File(this.getClass().getResource("/files/" + humanString).toURI());
+            //humanString = properties.getProperty("firstHumans");
+            //this.humans = new File(this.getClass().getResource("/files/" + humanString).toURI());
         } catch (Exception e) {
             System.out.println("ErrorStart");
         }
@@ -55,55 +61,43 @@ public class FileOperator {
         try {
             dataString = properties.getProperty("data");
             humanString = properties.getProperty("humans");
-            this.data = new File(this.getClass().getResource("/files/" + dataString).toURI());
-            this.humans = new File(this.getClass().getResource("/files/" + humanString).toURI());
-            data.createNewFile();
-            humans.createNewFile();
+            this.data = new File("files/" + dataString);
+            this.humans = new File("files/" + humanString);
         } catch (Exception e) {
             System.out.println("ErrorSwitch");
         }
 
     }
 
-    public void saveValuesToFile() {
+    public void saveToFile() {
         try {
-
-            Writer fileW = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(data), "UTF-8"));
+            Path dataPath = Paths.get("files/" + dataString);
             String toBeWrited = "";
+            List<String> lines = new ArrayList();
             for (int i = 0; i < 4; i++) {
                 toBeWrited += this.l.getResourcesDisplay()[i] + ";";
             }
             toBeWrited = toBeWrited + this.l.getYear() + ";" + this.l.getHappiness();
-            fileW.write(toBeWrited);
-            fileW.close();
-        } catch (Exception e) {
-            System.out.println("ErrorSvaeValues");
-        }
-    }
-
-    public void saveHumansToFile() {
-        try {
-            humans.createNewFile();
-            FileWriter fw = new FileWriter(humans);
-            String toBeWrited = "";
+            lines.add(toBeWrited);
             for (Human h : this.l.gethD().getList()) {
-                toBeWrited += h.getFileString() + ";" + this.l.gethD().getWorkPlaces().get(h) + "\n";
+                String humanLine = h.getFileString() + ";" + this.l.getWorkplaceAsString(h);
+                lines.add(humanLine);
             }
-            fw.write(toBeWrited);
-            fw.close();
+            Files.write(dataPath, lines, TRUNCATE_EXISTING);
         } catch (Exception e) {
-            System.out.println("ErrorSaveHumans");
+            System.out.println("ErrorSaveValues");
         }
     }
 
     public double[] readValuesFromFile() {
         double[] table = new double[6];
         try {
-            Scanner reader = new Scanner(this.getClass().getResourceAsStream("/files/" + dataString));
+            Scanner reader = new Scanner(data);
             String[] line = reader.nextLine().split(";");
             for (int i = 0; i < line.length; i++) {
                 table[i] = Double.parseDouble(line[i]);
             }
+            reader.close();
         } catch (Exception e) {
 
         }
@@ -113,7 +107,8 @@ public class FileOperator {
     public Map<Human, Factories> readHumansFromFile() {
         Map<Human, Factories> map = new HashMap();
         try {
-            Scanner reader = new Scanner(this.getClass().getResourceAsStream("/files/" + humanString));
+            Scanner reader = new Scanner(data);
+            reader.nextLine();
             while (reader.hasNext()) {
                 String[] line = reader.nextLine().split(";");
                 if (line[3].equals("null")) {

@@ -36,4 +36,11 @@
                 <exec.executable>java</exec.executable>
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-clean</actionName>
+            <displayName>clean</displayName>
+            <goals>
+                <goal>clean:clean</goal>
+            </goals>
+        </action>
     </actions>

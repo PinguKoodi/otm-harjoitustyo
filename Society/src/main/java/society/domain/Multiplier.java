@@ -59,10 +59,10 @@ public class Multiplier {
         mult *= (experience + 1);
         mult *= soldierMultiplier();
         double tools = this.l.getResources()[1];
-        if (tools < farmers*0.875) {
+        if (tools < farmers * 0.875) {
             mult *= 0.7;
         } else {
-            tools = Math.min(tools/farmers*0.8, 3);
+            tools = Math.min(tools / farmers * 0.8, 2);
             mult *= tools;
         }
         return mult;
@@ -70,14 +70,14 @@ public class Multiplier {
 
     public double getFactoryMultiplier() {
         double science = this.l.getResources()[2];
-        science /= 500;
+        science /= 100;
         science += 1;
         int totalXP = 0;
         List<Human> list = this.hD.getListOfWorkersAtPlace(Factories.FACTORY);
         for (Human h : this.hD.getListOfWorkersAtPlace(Factories.FACTORY)) {
             totalXP += h.getExperience();
         }
-        double totalMult = 0.5;
+        double totalMult = 0.7;
         if (!list.isEmpty()) {
             double temp = totalXP / list.size();
             temp /= 100;
@@ -100,6 +100,7 @@ public class Multiplier {
         experience /= 100;
         experience++;
         mult *= experience;
+        mult *= ((scientists / 100) + 1);
         return mult;
     }
 

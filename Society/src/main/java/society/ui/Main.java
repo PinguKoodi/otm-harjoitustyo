@@ -203,32 +203,19 @@ public class Main extends Application {
             humanList.setScene(listScene);
             humanList.show();
         });
-
-        BorderPane setting2 = new BorderPane();
-        setting2.setMinSize(50, 50);
-        setting2.setTop(new Label("You have lost"));
         Button endGameOnGameScreen = new Button("Exit game");
         endGameOnGameScreen.setOnAction((event) -> {
             window.close();
         });
+        
         setting.add(endGameOnGameScreen, 3, 6);
-
-        Button endGame = new Button("Exit game");
-        endGame.setOnAction((event) -> {
-            window.close();
-        });
-        setting2.setCenter(new Label("You got in total " + this.logic.getResourcesDisplay()[2] + " science points and your reign lasted for "
-                + this.logic.getYear() + " years."));
-        setting2.setBottom(endGame);
-        Scene view2 = new Scene(setting2);
+        
         Scene view = new Scene(setting);
         window.setScene(view);
 
         endTurn.setOnAction((event) -> {
             if (this.logic.endTurn()) {
-                setting2.setCenter(new Label("You got in total " + this.logic.getResourcesDisplay()[2] + " science points and your reign lasted for "
-                        + this.logic.getYear() + " years."));
-                window.setScene(view2);
+                endGameScreen(window);
             }
             updateInfo();
 
@@ -243,33 +230,21 @@ public class Main extends Application {
         });
         window.show();
     }
-
-    private void updateInfo() {
-        int[] workers1 = this.hD.getNumberOfWorkers();
-        double[] resources1 = this.logic.getResourcesDisplay();
-        double[] prods = this.logic.getProductionDisplay();
-        foodTools.setText("Food: " + resources1[0]);
-        tools.setText("Tools: " + resources1[1]);
-        scienceGuns.setText("Science: " + resources1[2]);
-        guns.setText("Guns: " + resources1[3]);
-        farmers.setText("Farmers: " + workers1[0]);
-        workersL.setText("Workers: " + workers1[1]);
-        scientists.setText("Scientists: " + workers1[2]);
-        soldiers.setText("Soldiers: " + workers1[3]);
-        yearL.setText("Year: " + this.logic.getYear());
-        unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
-        children.setText("Children: " + this.hD.numberOfChilds());
-        happiness.setText("Happiness: " + this.logic.getHappiness());
-        if (prods[0] < 0) {
-            foodProd.setText("(" + prods[0] + ")");
-            foodProd.setTextFill(Color.web("FF0000"));
-        } else {
-            foodProd.setText("(+" + (prods[0]) + ")");
-            foodProd.setTextFill(Color.web("00CC00"));
-        }
-        toolProd.setText("(+" + prods[1] + ")");
-        scienceProd.setText("(+" + prods[2] + ")");
-        gunProd.setText("(+" + prods[3] + ")");
+    
+    private void endGameScreen(Stage stage) {
+        
+        BorderPane setting2 = new BorderPane();
+        setting2.setMinSize(50, 50);
+        setting2.setTop(new Label("You have lost"));
+        Button endGame = new Button("Exit game");
+        endGame.setOnAction((event) -> {
+            stage.close();
+        });
+        setting2.setCenter(new Label("You got in total " + this.logic.getResourcesDisplay()[2] + " science points and your reign lasted for "
+                + this.logic.getYear() + " years."));
+        setting2.setBottom(endGame);
+        Scene view2 = new Scene(setting2);
+        stage.setScene(view2);
     }
 
     private void initializeLabels() {
@@ -298,17 +273,45 @@ public class Main extends Application {
         } else {
             foodProd.setTextFill(Color.web("00CC00"));
         }
-        foodProd.setTranslateX(70.0);
+        foodProd.setTranslateX(80.0);
         toolProd.setTextFill(Color.web("00CC00"));
-        toolProd.setTranslateX(70.0);
+        toolProd.setTranslateX(80.0);
         scienceProd.setTextFill(Color.web("00CC00"));
-        scienceProd.setTranslateX(70.0);
+        scienceProd.setTranslateX(90.0);
         gunProd.setTextFill(Color.web("00CC00"));
-        gunProd.setTranslateX(70.0);
-        foodTools.setMinWidth(100);
-        tools.setMinWidth(100);
-        scienceGuns.setMinWidth(100);
-        guns.setMinWidth(100);
+        gunProd.setTranslateX(80.0);
+        foodTools.setMinWidth(110);
+        tools.setMinWidth(110);
+        scienceGuns.setMinWidth(110);
+        guns.setMinWidth(110);
+    }
+
+    private void updateInfo() {
+        int[] workers1 = this.hD.getNumberOfWorkers();
+        double[] resources1 = this.logic.getResourcesDisplay();
+        double[] prods = this.logic.getProductionDisplay();
+        foodTools.setText("Food: " + resources1[0]);
+        tools.setText("Tools: " + resources1[1]);
+        scienceGuns.setText("Science: " + resources1[2]);
+        guns.setText("Guns: " + resources1[3]);
+        farmers.setText("Farmers: " + workers1[0]);
+        workersL.setText("Workers: " + workers1[1]);
+        scientists.setText("Scientists: " + workers1[2]);
+        soldiers.setText("Soldiers: " + workers1[3]);
+        yearL.setText("Year: " + this.logic.getYear());
+        unemployed.setText("Unemployed: " + this.hD.numberOfUnemployed());
+        children.setText("Children: " + this.hD.numberOfChilds());
+        happiness.setText("Happiness: " + this.logic.getHappiness());
+        if (prods[0] < 0) {
+            foodProd.setText("(" + prods[0] + ")");
+            foodProd.setTextFill(Color.web("FF0000"));
+        } else {
+            foodProd.setText("(+" + (prods[0]) + ")");
+            foodProd.setTextFill(Color.web("00CC00"));
+        }
+        toolProd.setText("(+" + prods[1] + ")");
+        scienceProd.setText("(+" + prods[2] + ")");
+        gunProd.setText("(+" + prods[3] + ")");
     }
 
     public static void main(String[] args) {
