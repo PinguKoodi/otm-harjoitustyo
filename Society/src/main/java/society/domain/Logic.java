@@ -123,7 +123,7 @@ public class Logic {
     }
 
     private void calculateHappiness(boolean foodIsOut) {
-        double amountOfPeople = this.hD.getList().size();
+        double amountOfPeople = this.hD.getPopulation();
         double change = 0;
         if (foodIsOut) {
             change -= 5;
