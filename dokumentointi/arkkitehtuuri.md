@@ -7,6 +7,7 @@ Ohjelmassa on kolmitasoinen kerrosarkkitehtuuri, jossa pakkaus society.ui sisäl
 Luokkakaavio josta selviää tärkeimmät riippuvuussuhteet
 <img src="https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/Grafiikat/SocietyClassDiagramV2.jpg"/>
 Pakkausrakennetta kuvaavaa kaavio:
+
 <img src="https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/Grafiikat/SocietyPackageDiagram.png"/>
 
 ## Sekvenvssikaavio
