@@ -73,6 +73,10 @@ public class Logic {
         }
     }
 
+//    public boolean saveToFile() {
+//        return operator.saveToFile();
+//    }
+    
     public boolean saveToFile() {
         return operator.saveToFile();
     }

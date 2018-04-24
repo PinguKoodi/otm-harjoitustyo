@@ -31,6 +31,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import society.domain.Factories;
@@ -141,20 +144,20 @@ public class Main extends Application {
         setting.setPadding(new Insets(25, 25, 25, 25));
         setting.add(farmers, 1, 1);
         setting.add(workersL, 1, 3);
-        setting.add(scientists, 3, 1);
-        setting.add(soldiers, 3, 3);
-        setting.add(children, 3, 5);
-        setting.add(unemployed, 2, 5);
-        setting.add(yearL, 1, 5);
+        setting.add(scientists, 2, 1);
+        setting.add(soldiers, 2, 3);
+        setting.add(children, 2, 5);
+        setting.add(unemployed, 1, 5);
+        setting.add(yearL, 1, 0);
         setting.add(happiness, 4, 5);
-        setting.add(foodTools, 1, 0);
-        setting.add(tools, 2, 0);
-        setting.add(scienceGuns, 3, 0);
-        setting.add(guns, 4, 0);
-        setting.add(foodProd, 1, 0);
-        setting.add(toolProd, 2, 0);
-        setting.add(scienceProd, 3, 0);
-        setting.add(gunProd, 4, 0);
+        setting.add(foodTools, 3, 1);
+        setting.add(tools, 3, 2);
+        setting.add(scienceGuns, 3, 3);
+        setting.add(guns, 3, 4);
+        setting.add(foodProd, 4, 1);
+        setting.add(toolProd, 4, 2);
+        setting.add(scienceProd, 4, 3);
+        setting.add(gunProd, 4, 4);
 //        setting.add(new Label("Tools:" + this.logic.getResources()[1]), 2, 0);
 //        setting.add(new Label("Science:" + this.logic.getResources()[2]), 3, 0);
 //        setting.add(new Label("Guns:" + this.logic.getResources()[3]), 4, 0);
@@ -169,7 +172,6 @@ public class Main extends Application {
         Button farmB = new Button("Assing to Farm");
         HBox hFarmB = new HBox(10);
         hFarmB.getChildren().add(farmB);
-        setting.add(hFarmB, 1, 2);
         farmB.setOnAction((event) -> {
             logic.assignWorker(Factories.FARM);
             updateInfo();
@@ -177,7 +179,6 @@ public class Main extends Application {
         Button factoryB = new Button("Assing to Factory");
         HBox hFactoryB = new HBox(10);
         hFactoryB.getChildren().add(factoryB);
-        setting.add(hFactoryB, 1, 4);
         factoryB.setOnAction((event) -> {
             logic.assignWorker(Factories.FACTORY);
             updateInfo();
@@ -185,7 +186,6 @@ public class Main extends Application {
         Button laboratoryB = new Button("Assing to Lab");
         HBox hLaboratoryB = new HBox(10);
         hLaboratoryB.getChildren().add(laboratoryB);
-        setting.add(hLaboratoryB, 3, 2);
         laboratoryB.setOnAction((event) -> {
             logic.assignWorker(Factories.LABORATORY);
             updateInfo();
@@ -194,11 +194,14 @@ public class Main extends Application {
         Button armyB = new Button("Assing to Army");
         HBox hArmyB = new HBox(10);
         hArmyB.getChildren().add(armyB);
-        setting.add(hArmyB, 3, 4);
         armyB.setOnAction((event) -> {
             logic.assignWorker(Factories.ARMY);
             updateInfo();
         });
+        setting.add(hLaboratoryB, 2, 2);
+        setting.add(hArmyB, 2, 4);
+        setting.add(hFactoryB, 1, 4);
+        setting.add(hFarmB, 1, 2);
 
         Button showHumans = new Button("Human overview");
         setting.add(showHumans, 1, 6);
@@ -276,14 +279,22 @@ public class Main extends Application {
 
         BorderPane setting2 = new BorderPane();
         setting2.setMinSize(50, 50);
-        setting2.setTop(new Label("You have lost"));
+        Text topText = new Text("You have lost");
+        topText.setFill(Color.RED);
+        topText.setFont(Font.font(Font.getDefault().getName(), FontWeight.BOLD, 30));
+        setting2.setTop(topText);
+        BorderPane.setAlignment(topText, Pos.CENTER);
         Button endGame = new Button("Exit game");
+        BorderPane.setAlignment(endGame, Pos.CENTER);
         endGame.setOnAction((event) -> {
             stage.close();
         });
-        setting2.setCenter(new Label("You got in total " + this.logic.getResourcesDisplay()[2] + " science points and your reign lasted for "
-                + this.logic.getYear() + " years."));
+        Label midLabel = new Label("You got in total " + this.logic.getResourcesDisplay()[2] + " science points and your reign lasted for "
+                + this.logic.getYear() + " years.");
+        setting2.setCenter(midLabel);
         setting2.setBottom(endGame);
+        setting2.setPadding(new Insets(0,0,20,0));
+        midLabel.setPadding(new Insets(20,0,20,0));
         Scene view2 = new Scene(setting2);
         stage.setScene(view2);
     }
@@ -314,13 +325,13 @@ public class Main extends Application {
         } else {
             foodProd.setTextFill(Color.web("00CC00"));
         }
-        foodProd.setTranslateX(80.0);
+//        foodProd.setTranslateX(85.0);
         toolProd.setTextFill(Color.web("00CC00"));
-        toolProd.setTranslateX(80.0);
+//        toolProd.setTranslateX(80.0);
         scienceProd.setTextFill(Color.web("00CC00"));
-        scienceProd.setTranslateX(90.0);
+//        scienceProd.setTranslateX(90.0);
         gunProd.setTextFill(Color.web("00CC00"));
-        gunProd.setTranslateX(80.0);
+//        gunProd.setTranslateX(80.0);
         foodTools.setMinWidth(110);
         tools.setMinWidth(110);
         scienceGuns.setMinWidth(110);

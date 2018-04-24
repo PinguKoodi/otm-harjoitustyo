@@ -28,6 +28,9 @@ import society.domain.Human;
 import society.domain.Logic;
 import society.ui.Main;
 
+import java.io.StringWriter;
+import java.io.PrintWriter;
+
 /**
  *
  * @author Lauri
@@ -60,9 +63,13 @@ public class FileOperator {
     public void switchToLoadFromSave() {
         try {
             dataString = properties.getProperty("data");
+//            dataString = ClassLoader.getSystemClassLoader().getResource(".").getPath() + dataString;
             humanString = properties.getProperty("humans");
-            this.data = new File("files/" + dataString);
+            File jarFile = new File(FileOperator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            String dataFilePath = jarFile.getParent() + File.separator + dataString;
+            this.data = new File(dataFilePath);
             this.humans = new File("files/" + humanString);
+            this.data.createNewFile();
         } catch (Exception e) {
 
         }
@@ -71,24 +78,31 @@ public class FileOperator {
 
     public boolean saveToFile() {
         try {
-            Path dataPath = Paths.get("files/" + dataString);
-            String toBeWrited = "";
-            List<String> lines = new ArrayList();
-            for (int i = 0; i < 4; i++) {
-                toBeWrited += this.l.getResourcesDisplay()[i] + ";";
-            }
-            toBeWrited = toBeWrited + this.l.getYear() + ";" + this.l.getHappiness();
-            lines.add(toBeWrited);
-            for (Human h : this.l.gethD().getList()) {
-                String humanLine = h.getFileString() + ";" + this.l.getWorkplaceAsString(h);
-                lines.add(humanLine);
-            }
-            Files.write(dataPath, lines, TRUNCATE_EXISTING);
+            File jarFile = new File(FileOperator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            String dataFilePath = jarFile.getParent() + File.separator + dataString;
+            Path dataPath = Paths.get(dataFilePath);
+            
+            Files.write(dataPath, getFileString(), TRUNCATE_EXISTING);
             return true;
         } catch (Exception e) {
 
         }
         return false;
+    }
+
+    private List<String> getFileString() {
+        String toBeWrited = "";
+        List<String> lines = new ArrayList();
+        for (int i = 0; i < 4; i++) {
+            toBeWrited += this.l.getResourcesDisplay()[i] + ";";
+        }
+        toBeWrited = toBeWrited + this.l.getYear() + ";" + this.l.getHappiness();
+        lines.add(toBeWrited);
+        for (Human h : this.l.gethD().getList()) {
+            String humanLine = h.getFileString() + ";" + this.l.getWorkplaceAsString(h);
+            lines.add(humanLine);
+        }
+        return lines;
     }
 
     public double[] readValuesFromFile() {
