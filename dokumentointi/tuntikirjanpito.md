@@ -10,5 +10,5 @@
 |17.4.|2|Tiedosto-tallenuksen jatkokehitys, toimii myös jar.tiedostossa, checkstyle-vaatimusten toteutus|
 |22.4|3|Ui:n parantelua, ensi vuoron tuotannon näyttäminen ja lisää testejä|
 |23.4|4|Sovelluslogiikan perustoiminnallisuuden parantelua, tiedosto-olion toiminnallisuus myös jar-tiedostoksi pakattaessa ja pientä ui-muokkailua|
-|24.4|2|Varmistus että viikon tavoitteet täyttyvät ja releasen teko|
-|\sum|29|
+|24.4|4|Varmistus että viikon tavoitteet täyttyvät, taas uusi versio tiedostotoiminnallisuudesta ja releasen teko|
+|Summa|31|
