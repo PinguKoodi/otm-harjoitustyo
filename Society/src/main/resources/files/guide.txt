@@ -5,9 +5,16 @@ If you run out of food, people will get starve and die.
 To boost food production, you may allocate some workers to the Factory.
 Tools made in factory will help improve the output of Farm.
 Especially, if you have less tools than farmers, your food output is
-greatly reduced
+greatly reduced.
+Farmers will also consume tools, so that the more farmers you have, the more
+tools will be used.
 Scientist in laboratory will slowly make more Science.
 Science will make Factory work more efficiently,
 and it is the true measure of your society, so you will be ranked by it.
-Remember to keep some soldiers ready, otherwise you may experience severed
-resource income, or other dangers.
+Remember to keep some soldiers ready, otherwise you may experience resource 
+loss, or severed resource income.
+The game can be played either by using only your mouse, or by keyboard shortcuts.
+You can assign workers to different workplaces by pressing A, S, D or F.
+The will accordingly be assigned to Farm, Factory, Laboratory or Army.
+Ending turn can be done by pressing enter key.
+And holding down the key will repeat the action, if you wish to do so.

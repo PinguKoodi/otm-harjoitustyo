@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package society.domain;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -25,25 +26,20 @@ public class Logic {
 
     public Logic(HumanDistributor hD) {
         this.hD = hD;
-        this.resources = new double[4];
-        this.resources[0] = 100;
-        for (int i = 1; i < 4; i++) { 
-            this.resources[i] = 0; 
-        }
-        this.year = 0;
         this.rng = new Random();
         this.mult = new Multiplier(this, this.hD);
-        this.happiness = 50;
         this.operator = new FileOperator(this);
+        initializeResources();
     }
 
     public void startGame(boolean loadedGame) {
+        initializeResources();
+        this.hD.killAll();
         if (loadedGame) {
             operator.switchToLoadFromSave();
-        }
-        this.loadHumans();
-        if (this.hD.getList().isEmpty()) { //Fail-safe is loading doesn't work
-            this.createFirstHumans();
+            this.loadHumans();
+        } else {
+            createFirstHumans();
         }
 //        this.createFirstHumans();
         operator.switchToLoadFromSave();
@@ -68,7 +64,6 @@ public class Logic {
             }
         }
         this.hD.sortHumansByAge();
-
     }
 
     public void assignWorker(Factories f) {
@@ -78,8 +73,8 @@ public class Logic {
         }
     }
 
-    public void saveToFile() {
-        operator.saveToFile();
+    public boolean saveToFile() {
+        return operator.saveToFile();
     }
 
     public boolean endTurn() {
@@ -157,13 +152,16 @@ public class Logic {
     }
 
     public void createFirstHumans() {
-        for (int i = 0; i < 15; i++) {
-            if (i < 10) {
-                this.hD.setHumanFactory(new Human("Firstborn" + i, 20 + i, 10 + i), Factories.FARM);
+        for (int i = 0; i < 17; i++) {
+            if (i < 8) {
+                this.hD.setHumanFactory(new Human("A-" + i, 20 + i, 10 + i), Factories.FARM);
+            } else if (i < 10) {
+                this.hD.addHuman(new Human("I-" + i, i * 2 - 5));
             } else {
-                this.hD.addHuman(new Human("Firstborn" + i, 20 + i));
+                this.hD.addHuman(new Human("X-" + i, 20));
             }
         }
+        this.hD.sortHumansByAge();
     }
 
     public double[] getProduction() {
@@ -220,7 +218,9 @@ public class Logic {
         resourceSum /= 1000;
         if (resourceSum > soldiers) {
             for (int i = 0; i < 4; i++) {
-                resources[i] = resources[i] * 0.95;
+                if (i != 2) {
+                    resources[i] = resources[i] * 0.95;
+                }
             }
         }
     }
@@ -231,5 +231,14 @@ public class Logic {
         } else {
             return this.hD.getWorkPlaces().get(h).toString();
         }
+    }
+    private void initializeResources() {
+        this.resources = new double[4];
+        this.resources[0] = 100;
+        for (int i = 1; i < 4; i++) {
+            this.resources[i] = 0;
+        }
+        this.year = 0;
+        this.happiness = 50;
     }
 }

@@ -157,6 +157,10 @@ public class HumanDistributor {
             shortage++;
         }
     }
+    public void killAll() {
+        this.list = new ArrayList();
+        this.workPlaces = new HashMap();
+    }
 
     public String getHumansDisplay() {
         String display = new String();

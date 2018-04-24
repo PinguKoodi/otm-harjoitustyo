@@ -53,7 +53,7 @@ public class FileOperator {
             //humanString = properties.getProperty("firstHumans");
             //this.humans = new File(this.getClass().getResource("/files/" + humanString).toURI());
         } catch (Exception e) {
-            System.out.println("ErrorStart");
+
         }
     }
 
@@ -64,12 +64,12 @@ public class FileOperator {
             this.data = new File("files/" + dataString);
             this.humans = new File("files/" + humanString);
         } catch (Exception e) {
-            System.out.println("ErrorSwitch");
+
         }
 
     }
 
-    public void saveToFile() {
+    public boolean saveToFile() {
         try {
             Path dataPath = Paths.get("files/" + dataString);
             String toBeWrited = "";
@@ -84,15 +84,17 @@ public class FileOperator {
                 lines.add(humanLine);
             }
             Files.write(dataPath, lines, TRUNCATE_EXISTING);
+            return true;
         } catch (Exception e) {
-            System.out.println("ErrorSaveValues");
+
         }
+        return false;
     }
 
     public double[] readValuesFromFile() {
         double[] table = new double[6];
         try {
-            Scanner reader = new Scanner(data);
+            Scanner reader = new Scanner(this.data);
             String[] line = reader.nextLine().split(";");
             for (int i = 0; i < line.length; i++) {
                 table[i] = Double.parseDouble(line[i]);
@@ -107,7 +109,7 @@ public class FileOperator {
     public Map<Human, Factories> readHumansFromFile() {
         Map<Human, Factories> map = new HashMap();
         try {
-            Scanner reader = new Scanner(data);
+            Scanner reader = new Scanner(this.data);
             reader.nextLine();
             while (reader.hasNext()) {
                 String[] line = reader.nextLine().split(";");

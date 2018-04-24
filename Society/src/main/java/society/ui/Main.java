@@ -14,13 +14,17 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -67,8 +71,9 @@ public class Main extends Application {
     @Override
     public void start(Stage window2) {
         GridPane startSet = new GridPane();
-        startSet.setMinWidth(150);
+//        startSet.setMinWidth(150);
         startSet.setVgap(20);
+        startSet.setPadding(new Insets(20, 20, 20, 20));
         Button beginGame = new Button("Start new game");
         HBox bGBtn = new HBox(10);
         startSet.setAlignment(Pos.CENTER);
@@ -81,6 +86,9 @@ public class Main extends Application {
         startSet.add(loadGame, 0, 1);
         Button help = new Button("Game guide");
         startSet.add(help, 0, 2);
+        for (Node n : startSet.getChildren()) {
+            GridPane.setHalignment(n, HPos.CENTER);
+        }
         Scene start = new Scene(startSet);
         beginGame.setOnAction((event) -> {
             this.logic.startGame(false);
@@ -104,17 +112,20 @@ public class Main extends Application {
 
     private void gameGuideWindow() {
         Stage guideWindow = new Stage();
-        guideWindow.setTitle("Guide for noobs");
+        guideWindow.setTitle("Guide for beginners");
         VBox guide = new VBox();
         Button closeGuide = new Button("Close guide");
         closeGuide.setOnAction((event) -> {
             guideWindow.close();
         });
+
         Text guideText = new Text();
         guideText.setText(this.logic.getGuideText());
         guide.getChildren().add(guideText);
         guide.getChildren().add(closeGuide);
+
         Scene guideScene = new Scene(guide);
+        guide.setAlignment(Pos.CENTER);
         guideWindow.setScene(guideScene);
         guideWindow.show();
     }
@@ -124,6 +135,7 @@ public class Main extends Application {
         window.setTitle("Society");
         initializeLabels();
         GridPane setting = new GridPane();
+
         setting.setVgap(20);
         setting.setHgap(20);
         setting.setPadding(new Insets(25, 25, 25, 25));
@@ -146,16 +158,14 @@ public class Main extends Application {
 //        setting.add(new Label("Tools:" + this.logic.getResources()[1]), 2, 0);
 //        setting.add(new Label("Science:" + this.logic.getResources()[2]), 3, 0);
 //        setting.add(new Label("Guns:" + this.logic.getResources()[3]), 4, 0);
-        Button endTurn = new Button("End Turn");
-        HBox hbBtn = new HBox(10);
-        hbBtn.getChildren().add(endTurn);
-        setting.add(hbBtn, 4, 6);
+
         Button saveGame = new Button("Save game");
         setting.add(saveGame, 2, 6);
         saveGame.setOnAction((event) -> {
-            this.logic.saveToFile();
+            fileSavedWindow(this.logic.saveToFile());
         });
 
+        //createAssignButtons(setting);
         Button farmB = new Button("Assing to Farm");
         HBox hFarmB = new HBox(10);
         hFarmB.getChildren().add(farmB);
@@ -189,6 +199,7 @@ public class Main extends Application {
             logic.assignWorker(Factories.ARMY);
             updateInfo();
         });
+
         Button showHumans = new Button("Human overview");
         setting.add(showHumans, 1, 6);
         showHumans.setOnAction((event) -> {
@@ -203,16 +214,19 @@ public class Main extends Application {
             humanList.setScene(listScene);
             humanList.show();
         });
-        Button endGameOnGameScreen = new Button("Exit game");
+        Button endGameOnGameScreen = new Button("Main menu");
         endGameOnGameScreen.setOnAction((event) -> {
+            start(new Stage());
             window.close();
         });
-        
         setting.add(endGameOnGameScreen, 3, 6);
-        
+
         Scene view = new Scene(setting);
         window.setScene(view);
-
+        Button endTurn = new Button("End Turn");
+        HBox hbBtn = new HBox(10);
+        hbBtn.getChildren().add(endTurn);
+        setting.add(hbBtn, 4, 6);
         endTurn.setOnAction((event) -> {
             if (this.logic.endTurn()) {
                 endGameScreen(window);
@@ -220,19 +234,46 @@ public class Main extends Application {
             updateInfo();
 
         });
-
-        view.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    endTurn.fire();
-                }
+        view.setOnKeyPressed((KeyEvent event) -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                endTurn.fire();
+            } else if (event.getCode() == KeyCode.A) {
+                farmB.fire();
+            } else if (event.getCode() == KeyCode.S) {
+                factoryB.fire();
+            } else if (event.getCode() == KeyCode.D) {
+                laboratoryB.fire();
+            } else if (event.getCode() == KeyCode.F) {
+                armyB.fire();
             }
         });
         window.show();
     }
-    
+
+    private void fileSavedWindow(boolean saveCompleted) {
+        Stage savedWindow = new Stage();
+        BorderPane savedSetting = new BorderPane();
+        Button closeWindow = new Button("Ok");
+        Text fileSavedText = new Text();
+        fileSavedText.setText("Your game has been saved");
+        if (!saveCompleted) {
+            fileSavedText.setText(("There was error saving your game"));
+        }
+        savedSetting.setCenter(fileSavedText);
+        savedSetting.setBottom(closeWindow);
+        BorderPane.setAlignment(closeWindow, Pos.CENTER);
+        BorderPane.setMargin(closeWindow, new Insets(5, 5, 5, 5));
+        BorderPane.setMargin(fileSavedText, new Insets(5, 5, 5, 5));
+        closeWindow.setOnAction((event) -> {
+            savedWindow.close();
+        });
+        savedSetting.setMinHeight(60);
+        savedWindow.setScene(new Scene(savedSetting));
+        savedWindow.show();
+    }
+
     private void endGameScreen(Stage stage) {
-        
+
         BorderPane setting2 = new BorderPane();
         setting2.setMinSize(50, 50);
         setting2.setTop(new Label("You have lost"));

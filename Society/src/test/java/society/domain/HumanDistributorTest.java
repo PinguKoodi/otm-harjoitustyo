@@ -225,7 +225,7 @@ public class HumanDistributorTest {
         this.hd.addHuman(h1);
         this.hd.setHumanFactory(h2, Factories.FARM);
         String display = this.hd.getHumansDisplay();
-        assertEquals("Total population: 2\nA, Age: 20, experience: 0, unemployed\nB, Age: 20, experience: 0, FARM\n", display);
+        assertEquals("Total population: 2\nA, Age: 20, Unskilled, unemployed\nB, Age: 20, Unskilled, FARM\n", display);
     }
 
     @Test

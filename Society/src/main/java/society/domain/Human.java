@@ -64,7 +64,17 @@ public class Human implements Comparable<Human> {
 
     @Override
     public String toString() {
-        return this.name + ", Age: " + this.age + ", experience: " + this.experience;
+        String skillLevel = "";
+        if (experience < 20) {
+            skillLevel = "Unskilled";
+        } else if (experience < 40) {
+            skillLevel = "Adept";
+        } else if (experience < 60) {
+            skillLevel = "Professional";
+        } else {
+            skillLevel = "Masterous";
+        }
+        return this.name + ", Age: " + this.age + ", " + skillLevel;
     }
 
     public String getFileString() {
