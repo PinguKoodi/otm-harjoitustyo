@@ -41,14 +41,14 @@ public class HumanDistributorTest {
     @Test
     public void addingHumansWork() {
         Human h = new Human("D-503", 30);
-        this.hd.addHuman(h);
+        this.hd.addWorkerUnit(h);
         assertTrue(this.hd.getList().contains(h));
     }
 
     @Test
     public void addingHumansWorkDontGiveThemWorkplace() {
         Human h = new Human("D-503", 30);
-        this.hd.addHuman(h);
+        this.hd.addWorkerUnit(h);
         assertTrue(this.hd.getWorkPlaces().get(h) == null);
     }
 
@@ -56,10 +56,10 @@ public class HumanDistributorTest {
     public void settingFactoryWorks() {
         Human h = new Human("D-503", 30);
         Human h2 = new Human("D-54", 30);
-        this.hd.addHuman(h);
-        this.hd.setHumanFactory(h, Factories.FARM);
+        this.hd.addWorkerUnit(h);
+        this.hd.setWorkerUnitFactory(h, Factories.FARM);
         assertTrue(this.hd.getWorkPlaces().get(h) == Factories.FARM);
-        this.hd.setHumanFactory(h2, Factories.FACTORY);
+        this.hd.setWorkerUnitFactory(h2, Factories.FACTORY);
         assertTrue(this.hd.getWorkPlaces().get(h2) == Factories.FACTORY);
         assertTrue(this.hd.getList().contains(h2));
     }
@@ -74,14 +74,14 @@ public class HumanDistributorTest {
 
     @Test
     public void getNumberOfWorkersReturnsCorrectAmounts() {
-        this.hd.setHumanFactory(new Human("I"), Factories.FARM);
-        this.hd.setHumanFactory(new Human("I"), Factories.ARMY);
-        this.hd.setHumanFactory(new Human("I"), Factories.LABORATORY);
-        this.hd.setHumanFactory(new Human("I"), Factories.FARM);
-        this.hd.setHumanFactory(new Human("I"), Factories.FACTORY);
-        this.hd.setHumanFactory(new Human("I"), Factories.FARM);
-        this.hd.setHumanFactory(new Human("I"), Factories.FACTORY);
-        this.hd.addHuman(new Human("U"));
+        this.hd.setWorkerUnitFactory(new Human("I"), Factories.FARM);
+        this.hd.setWorkerUnitFactory(new Human("I"), Factories.ARMY);
+        this.hd.setWorkerUnitFactory(new Human("I"), Factories.LABORATORY);
+        this.hd.setWorkerUnitFactory(new Human("I"), Factories.FARM);
+        this.hd.setWorkerUnitFactory(new Human("I"), Factories.FACTORY);
+        this.hd.setWorkerUnitFactory(new Human("I"), Factories.FARM);
+        this.hd.setWorkerUnitFactory(new Human("I"), Factories.FACTORY);
+        this.hd.addWorkerUnit(new Human("U"));
         assertEquals(3, this.hd.getNumberOfWorkers()[0]);
         assertEquals(2, this.hd.getNumberOfWorkers()[1]);
         assertEquals(1, this.hd.getNumberOfWorkers()[2]);
@@ -90,42 +90,42 @@ public class HumanDistributorTest {
 
     @Test
     public void getPopulationReturnsCorrectAmount() {
-        this.hd.addHuman(new Human("D-503", 30));
-        this.hd.addHuman(new Human("D-504", 30));
-        this.hd.addHuman(new Human("D-505", 30));
+        this.hd.addWorkerUnit(new Human("D-503", 30));
+        this.hd.addWorkerUnit(new Human("D-504", 30));
+        this.hd.addWorkerUnit(new Human("D-505", 30));
         assertEquals(3, this.hd.getPopulation());
     }
 
     @Test
     public void getAdultsReturnsCorrectAmount() {
-        this.hd.addHuman(new Human("D-503", 10));
-        this.hd.addHuman(new Human("D-504", 30));
-        this.hd.addHuman(new Human("D-505", 30));
+        this.hd.addWorkerUnit(new Human("D-503", 10));
+        this.hd.addWorkerUnit(new Human("D-504", 30));
+        this.hd.addWorkerUnit(new Human("D-505", 30));
         assertEquals(2, this.hd.numberOfAdults());
     }
 
     @Test
     public void getChildrenReturnsCorrectAmount() {
-        this.hd.addHuman(new Human("D-503", 10));
-        this.hd.addHuman(new Human("D-504", 10));
-        this.hd.addHuman(new Human("D-505", 30));
+        this.hd.addWorkerUnit(new Human("D-503", 10));
+        this.hd.addWorkerUnit(new Human("D-504", 10));
+        this.hd.addWorkerUnit(new Human("D-505", 30));
         assertEquals(2, this.hd.numberOfChilds());
     }
 
     @Test
     public void getUnemployedReturnsNullCorrectly() {
-        this.hd.setHumanFactory(new Human("D-505", 30), Factories.FARM);
+        this.hd.setWorkerUnitFactory(new Human("D-505", 30), Factories.FARM);
         assertEquals(null, this.hd.getUnemployed());
     }
 
     @Test
     public void getUnemployedReturnsUnemployedHuman() {
         Human testSubject = new Human("D-505", 30);
-        this.hd.addHuman(testSubject);
+        this.hd.addWorkerUnit(testSubject);
         assertEquals(testSubject, this.hd.getUnemployed());
-        this.hd.setHumanFactory(new Human("I"), Factories.FARM);
-        this.hd.setHumanFactory(new Human("I"), Factories.ARMY);
-        this.hd.addHuman(new Human("D-503", 10));
+        this.hd.setWorkerUnitFactory(new Human("I"), Factories.FARM);
+        this.hd.setWorkerUnitFactory(new Human("I"), Factories.ARMY);
+        this.hd.addWorkerUnit(new Human("D-503", 10));
         assertEquals(testSubject, this.hd.getUnemployed());
     }
 
@@ -133,10 +133,10 @@ public class HumanDistributorTest {
     public void getListOfWorkersReturnsCorrectSizedList() {
         Human h1 = new Human("I");
         Human h2 = new Human("I");
-        this.hd.setHumanFactory(h1, Factories.FARM);
-        this.hd.setHumanFactory(h2, Factories.ARMY);
-        this.hd.addHuman(new Human("D-503", 10));
-        this.hd.addHuman(new Human("D-503", 30));
+        this.hd.setWorkerUnitFactory(h1, Factories.FARM);
+        this.hd.setWorkerUnitFactory(h2, Factories.ARMY);
+        this.hd.addWorkerUnit(new Human("D-503", 10));
+        this.hd.addWorkerUnit(new Human("D-503", 30));
         List testList = this.hd.getListOfWorkers();
         assertEquals(2, testList.size());
     }
@@ -145,11 +145,11 @@ public class HumanDistributorTest {
     public void getListOfWorkersReturnsListWithRightWorkers() {
         Human h1 = new Human("I");
         Human h2 = new Human("I");
-        this.hd.setHumanFactory(h1, Factories.FARM);
-        this.hd.setHumanFactory(h2, Factories.ARMY);
+        this.hd.setWorkerUnitFactory(h1, Factories.FARM);
+        this.hd.setWorkerUnitFactory(h2, Factories.ARMY);
         Human h3 = new Human("D-503", 10);
-        this.hd.addHuman(h3);
-        this.hd.addHuman(new Human("D-503", 30));
+        this.hd.addWorkerUnit(h3);
+        this.hd.addWorkerUnit(new Human("D-503", 30));
         List testList = this.hd.getListOfWorkers();
         assertTrue(testList.contains(h2));
         assertTrue(testList.contains(h1));
@@ -160,11 +160,11 @@ public class HumanDistributorTest {
     public void listOfWorkersAtPlaceReturnsCorrectListsWithFarm() {
         Human h1 = new Human("I");
         Human h2 = new Human("I");
-        this.hd.setHumanFactory(h1, Factories.FARM);
-        this.hd.setHumanFactory(h2, Factories.ARMY);
+        this.hd.setWorkerUnitFactory(h1, Factories.FARM);
+        this.hd.setWorkerUnitFactory(h2, Factories.ARMY);
         Human h3 = new Human("D-503", 10);
-        this.hd.addHuman(h3);
-        this.hd.addHuman(new Human("D-503", 30));
+        this.hd.addWorkerUnit(h3);
+        this.hd.addWorkerUnit(new Human("D-503", 30));
         List testList = this.hd.getListOfWorkersAtPlace(Factories.FARM);
         assertEquals(1, testList.size());
         assertTrue(testList.contains(h1));
@@ -174,8 +174,8 @@ public class HumanDistributorTest {
     public void makingPeopleOneYearOlderMakesPeopleAge() {
         Human h1 = new Human("I", 30);
         Human h2 = new Human("I", 10);
-        this.hd.setHumanFactory(h1, Factories.FARM);
-        this.hd.addHuman(h2);
+        this.hd.setWorkerUnitFactory(h1, Factories.FARM);
+        this.hd.addWorkerUnit(h2);
         this.hd.makeOneYearOlder();
         assertEquals(31, h1.getAge());
         assertEquals(11, h2.getAge());
@@ -185,8 +185,8 @@ public class HumanDistributorTest {
     public void makingPeopleOneYearOlderGivesPeopleExperience() {
         Human h1 = new Human("I", 30);
         Human h2 = new Human("I", 20);
-        this.hd.setHumanFactory(h1, Factories.FARM);
-        this.hd.setHumanFactory(h2, Factories.ARMY);
+        this.hd.setWorkerUnitFactory(h1, Factories.FARM);
+        this.hd.setWorkerUnitFactory(h2, Factories.ARMY);
         this.hd.makeOneYearOlder();
         assertEquals(1, h1.getExperience());
         assertEquals(1, h2.getExperience());
@@ -195,26 +195,26 @@ public class HumanDistributorTest {
     @Test
     public void makingPeopleOneYearOlderWillKillPeopleOverHundred() {
         Human h1 = new Human("I", 100);
-        this.hd.addHuman(h1);
+        this.hd.addWorkerUnit(h1);
         this.hd.makeOneYearOlder();
         assertTrue(!this.hd.getList().contains(h1));
     }
 
     @Test
     public void numberOfUnemployedReturnsCorrectAmount() {
-        this.hd.setHumanFactory(new Human("I", 50), Factories.FARM);
-        this.hd.setHumanFactory(new Human("I", 20), Factories.ARMY);
+        this.hd.setWorkerUnitFactory(new Human("I", 50), Factories.FARM);
+        this.hd.setWorkerUnitFactory(new Human("I", 20), Factories.ARMY);
         assertEquals(0, this.hd.numberOfUnemployed());
-        this.hd.addHuman(new Human("Lazy", 20));
+        this.hd.addWorkerUnit(new Human("Lazy", 20));
         assertEquals(1, this.hd.numberOfUnemployed());
     }
 
     @Test
     public void numberOfUnemployedDoesntCountKids() {
-        this.hd.setHumanFactory(new Human("I", 20), Factories.ARMY);
-        this.hd.addHuman(new Human("Lazy", 20));
-        this.hd.addHuman(new Human("Lazy2", 20));
-        this.hd.addHuman(new Human("Child", 10));
+        this.hd.setWorkerUnitFactory(new Human("I", 20), Factories.ARMY);
+        this.hd.addWorkerUnit(new Human("Lazy", 20));
+        this.hd.addWorkerUnit(new Human("Lazy2", 20));
+        this.hd.addWorkerUnit(new Human("Child", 10));
         assertEquals(2, this.hd.numberOfUnemployed());
     }
 
@@ -222,9 +222,9 @@ public class HumanDistributorTest {
     public void getHumansDisplayReturnsCorrectString() {
         Human h1 = new Human("A", 20);
         Human h2 = new Human("B", 20);
-        this.hd.addHuman(h1);
-        this.hd.setHumanFactory(h2, Factories.FARM);
-        String display = this.hd.getHumansDisplay();
+        this.hd.addWorkerUnit(h1);
+        this.hd.setWorkerUnitFactory(h2, Factories.FARM);
+        String display = this.hd.getWorkerUnitsDisplay();
         assertEquals("Total population: 2\nA, Age: 20, Unskilled, unemployed\nB, Age: 20, Unskilled, FARM\n", display);
     }
 
@@ -232,8 +232,8 @@ public class HumanDistributorTest {
     public void killPeopleWontKillIfThereIsNoShortage() {
         Human h1 = new Human("A", 20);
         Human h2 = new Human("B", 20);
-        this.hd.addHuman(h1);
-        this.hd.setHumanFactory(h2, Factories.FARM);
+        this.hd.addWorkerUnit(h1);
+        this.hd.setWorkerUnitFactory(h2, Factories.FARM);
         this.hd.kill(10);
         assertEquals(2, this.hd.getList().size());
     }
@@ -242,12 +242,23 @@ public class HumanDistributorTest {
     public void killPeopleRemovesPeople() {
         Human h1 = new Human("A", 20);
         Human h2 = new Human("B", 20);
-        this.hd.addHuman(h1);
-        this.hd.setHumanFactory(h2, Factories.FARM);
+        this.hd.addWorkerUnit(h1);
+        this.hd.setWorkerUnitFactory(h2, Factories.FARM);
         this.hd.kill(-1);
         assertEquals(1, this.hd.getList().size());
     }
-
+    @Test
+    public void soldierPercentReturnCorrectValueWhenThereIsSoldiers() {
+        this.hd.addWorkerUnit(new Human("A",20));
+        this.hd.setWorkerUnitFactory(new Human("I", 20), Factories.ARMY);
+        assertEquals(0.50,this.hd.soldierPercent(),0.0);
+    }
+    @Test
+    public void soldierPercentReturnCorrectValueWhenThereIsNotSoldiers() {
+        this.hd.addWorkerUnit(new Human("A",20));
+        this.hd.setWorkerUnitFactory(new Human("I", 20), Factories.FARM);
+        assertEquals(0.0,this.hd.soldierPercent(),0.0);
+    }
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //

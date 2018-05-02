@@ -30,12 +30,13 @@ import society.ui.Main;
 
 import java.io.StringWriter;
 import java.io.PrintWriter;
+import society.domain.WorkerUnit;
 
 /**
  *
  * @author Lauri
  */
-public class FileOperator {
+public class FileOperator implements SaveOperator {
 
     private Logic l;
     private File data;
@@ -76,12 +77,12 @@ public class FileOperator {
 
     }
 
-    public boolean saveToFile() {
+    public boolean saveGame() {
         try {
             File jarFile = new File(FileOperator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             String dataFilePath = jarFile.getParent() + File.separator + dataString;
             Path dataPath = Paths.get(dataFilePath);
-            
+
             Files.write(dataPath, getFileString(), TRUNCATE_EXISTING);
             return true;
         } catch (Exception e) {
@@ -98,14 +99,14 @@ public class FileOperator {
         }
         toBeWrited = toBeWrited + this.l.getYear() + ";" + this.l.getHappiness();
         lines.add(toBeWrited);
-        for (Human h : this.l.gethD().getList()) {
+        for (WorkerUnit h : this.l.gethD().getList()) {
             String humanLine = h.getFileString() + ";" + this.l.getWorkplaceAsString(h);
             lines.add(humanLine);
         }
         return lines;
     }
 
-    public double[] readValuesFromFile() {
+    public double[] readValuesFromSave() {
         double[] table = new double[6];
         try {
             Scanner reader = new Scanner(this.data);
@@ -120,8 +121,8 @@ public class FileOperator {
         return table;
     }
 
-    public Map<Human, Factories> readHumansFromFile() {
-        Map<Human, Factories> map = new HashMap();
+    public Map<WorkerUnit, Factories> readHumansFromSave() {
+        Map<WorkerUnit, Factories> map = new HashMap();
         try {
             Scanner reader = new Scanner(this.data);
             reader.nextLine();

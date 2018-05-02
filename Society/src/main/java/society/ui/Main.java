@@ -5,6 +5,10 @@
  */
 package society.ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javafx.scene.input.KeyEvent;
 import society.domain.HumanDistributor;
 import society.domain.Logic;
@@ -36,6 +40,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import society.domain.Distributor;
 import society.domain.Factories;
 import society.domain.Human;
 
@@ -46,7 +51,7 @@ import society.domain.Human;
 public class Main extends Application {
 
     private Logic logic;
-    private HumanDistributor hD;
+    private Distributor hD;
     private Label farmers;
     private Label workersL;
     private Label scientists;
@@ -63,6 +68,7 @@ public class Main extends Application {
     private Label toolProd;
     private Label scienceProd;
     private Label gunProd;
+    private Text humanList;
 
     @Override
     public void init() throws Exception {
@@ -204,21 +210,29 @@ public class Main extends Application {
         setting.add(hFarmB, 1, 2);
 
         Button showHumans = new Button("Human overview");
-        setting.add(showHumans, 1, 6);
+        setting.add(showHumans, 3, 0);
+        Stage humanListStage = new Stage();
         showHumans.setOnAction((event) -> {
-            Stage humanList = new Stage();
-            humanList.setTitle("List of Humans");
+            humanListStage.setTitle("List of Humans");
             ScrollPane box = new ScrollPane();
             box.setMaxHeight(600);
             box.setMinWidth(300);
-            String text = this.hD.getHumansDisplay();
-            box.setContent(new Text(text));
+            String text = this.hD.getWorkerUnitsDisplay();
+            this.humanList.setText(text);
+            box.setContent(this.humanList);
             Scene listScene = new Scene(box);
-            humanList.setScene(listScene);
-            humanList.show();
+            humanListStage.setScene(listScene);
+            humanListStage.show();
         });
+        Button help = new Button("Game guide");
+        setting.add(help, 4, 0);
+        help.setOnAction((event) -> {
+            gameGuideWindow();
+        });
+
         Button endGameOnGameScreen = new Button("Main menu");
         endGameOnGameScreen.setOnAction((event) -> {
+            humanListStage.close();
             start(new Stage());
             window.close();
         });
@@ -237,6 +251,7 @@ public class Main extends Application {
             updateInfo();
 
         });
+
         view.setOnKeyPressed((KeyEvent event) -> {
             if (event.getCode() == KeyCode.ENTER) {
                 endTurn.fire();
@@ -293,8 +308,8 @@ public class Main extends Application {
                 + this.logic.getYear() + " years.");
         setting2.setCenter(midLabel);
         setting2.setBottom(endGame);
-        setting2.setPadding(new Insets(0,0,20,0));
-        midLabel.setPadding(new Insets(20,0,20,0));
+        setting2.setPadding(new Insets(0, 0, 20, 0));
+        midLabel.setPadding(new Insets(20, 0, 20, 0));
         Scene view2 = new Scene(setting2);
         stage.setScene(view2);
     }
@@ -303,6 +318,7 @@ public class Main extends Application {
         int[] workers = this.hD.getNumberOfWorkers();
         double[] resources = this.logic.getResourcesDisplay();
         double[] prods = this.logic.getProductionDisplay();
+        this.humanList = new Text(this.hD.getWorkerUnitsDisplay());
         farmers = new Label("Farmers: " + workers[0]);
         workersL = new Label("Workers: " + workers[1]);
         scientists = new Label("Scientists: " + workers[2]);
@@ -321,16 +337,21 @@ public class Main extends Application {
         gunProd = new Label("(+" + prods[3] + ")");
         if (prods[0] < 0) {
             foodProd.setText("(" + prods[0] + ")");
-            foodProd.setTextFill(Color.web("FF0000"));
+            foodProd.setTextFill(Color.RED);
         } else {
-            foodProd.setTextFill(Color.web("00CC00"));
+            foodProd.setTextFill(Color.GREEN);
+        }
+        if (this.hD.soldierPercent() < 0.1) {
+            this.soldiers.setTextFill(Color.RED);
+        } else {
+            this.soldiers.setTextFill(Color.BLACK);
         }
 //        foodProd.setTranslateX(85.0);
-        toolProd.setTextFill(Color.web("00CC00"));
+        toolProd.setTextFill(Color.GREEN);
 //        toolProd.setTranslateX(80.0);
-        scienceProd.setTextFill(Color.web("00CC00"));
+        scienceProd.setTextFill(Color.GREEN);
 //        scienceProd.setTranslateX(90.0);
-        gunProd.setTextFill(Color.web("00CC00"));
+        gunProd.setTextFill(Color.GREEN);
 //        gunProd.setTranslateX(80.0);
         foodTools.setMinWidth(110);
         tools.setMinWidth(110);
@@ -356,17 +377,23 @@ public class Main extends Application {
         happiness.setText("Happiness: " + this.logic.getHappiness());
         if (prods[0] < 0) {
             foodProd.setText("(" + prods[0] + ")");
-            foodProd.setTextFill(Color.web("FF0000"));
+            foodProd.setTextFill(Color.RED);
         } else {
             foodProd.setText("(+" + (prods[0]) + ")");
-            foodProd.setTextFill(Color.web("00CC00"));
+            foodProd.setTextFill(Color.GREEN);
+        }
+        if (this.hD.soldierPercent() < 0.1) {
+            this.soldiers.setTextFill(Color.RED);
+        } else {
+            this.soldiers.setTextFill(Color.BLACK);
         }
         toolProd.setText("(+" + prods[1] + ")");
         scienceProd.setText("(+" + prods[2] + ")");
         gunProd.setText("(+" + prods[3] + ")");
+        this.humanList.setText(this.hD.getWorkerUnitsDisplay());
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         launch(args);
     }
 }

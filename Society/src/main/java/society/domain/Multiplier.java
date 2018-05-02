@@ -13,14 +13,19 @@ import java.util.List;
  */
 public class Multiplier {
 
-    private Logic l;
-    private HumanDistributor hD;
+    private ResourceManager resourceM;
+    private Distributor hD;
 
-    public Multiplier(Logic l, HumanDistributor hD) {
-        this.l = l;
-        this.hD = hD;
+    public Multiplier(ResourceManager rM, Distributor dist) {
+        this.resourceM = rM;
+        this.hD = dist;
     }
 
+    /**
+     * Calculates and returns all four multipliers for different factories
+     *
+     * @return double array which contains four different multipliers
+     */
     public double[] getAllMultipliers() {
         double[] mults = new double[4];
         for (int i = 0; i < 4; i++) {
@@ -34,6 +39,12 @@ public class Multiplier {
         return mults;
     }
 
+    /**
+     * Returns a specific multiplier
+     *
+     * @param i the factory which multiplier is wished to be computed
+     * @return double valued multiplier for the specific factory
+     */
     public double getMultiplier(int i) {
         switch (i) {
             case 0:
@@ -48,33 +59,44 @@ public class Multiplier {
         return 1;
     }
 
+    /**
+     * Calculates and return production multiplier for Farm
+     *
+     * @return multiplier for farm
+     */
     public double getFarmMultiplier() {
-        double mult = 2.0;
         double experience = 0;
-        List<Human> farmers = this.hD.getListOfWorkersAtPlace(Factories.FARM);
-        for (Human h : farmers) {
+        List<WorkerUnit> farmers = this.hD.getListOfWorkersAtPlace(Factories.FARM);
+        if (farmers.isEmpty()) { 
+            return 1; 
+        }
+        for (WorkerUnit h : farmers) {
             experience += h.getExperience();
         }
-        experience = experience / farmers.size() / 100;
-        mult *= (experience + 1);
+        double mult = 2.0 * ((experience / farmers.size() / 100) + 1);
         mult *= soldierMultiplier();
-        double tools = this.l.getResources()[1];
+        double tools = this.resourceM.getTools();
         if (tools < farmers.size() * 0.875) {
             mult *= 0.7;
         } else {
-            tools = Math.min(tools / farmers.size() * 0.8, 2);
-            mult *= tools;
+            mult *= Math.min(tools / farmers.size() * 0.8, 2);
         }
+        mult *= (Math.sqrt(this.resourceM.getScience()) / 500) + 1;
         return mult;
     }
 
+    /**
+     * Calculates and return production multiplier for Factory
+     *
+     * @return multiplier for Factory
+     */
     public double getFactoryMultiplier() {
-        double science = this.l.getResources()[2];
-        science /= 100;
+        double science = this.resourceM.getScience();
+        science /= 80;
         science += 1;
         int totalXP = 0;
-        List<Human> list = this.hD.getListOfWorkersAtPlace(Factories.FACTORY);
-        for (Human h : list) {
+        List<WorkerUnit> list = this.hD.getListOfWorkersAtPlace(Factories.FACTORY);
+        for (WorkerUnit h : list) {
             totalXP += h.getExperience();
         }
         double totalMult = 0.7;
@@ -89,11 +111,17 @@ public class Multiplier {
         return totalMult;
     }
 
+    /**
+     * Calculates and return production multiplier for Laboratory
+     *
+     * @return multiplier for Laboratory
+     */
     public double getLaboratoryMultiplier() {
         double mult = 0.1;
         double experience = 0;
-        int scientists = this.hD.getListOfWorkersAtPlace(Factories.LABORATORY).size();
-        for (Human h : this.hD.getListOfWorkersAtPlace(Factories.LABORATORY)) {
+        List<WorkerUnit> list = this.hD.getListOfWorkersAtPlace(Factories.LABORATORY);
+        int scientists = list.size();
+        for (WorkerUnit h : list) {
             experience = experience + Math.pow(h.getExperience() * 0.1, 2);
         }
         experience /= scientists;
@@ -104,9 +132,14 @@ public class Multiplier {
         return mult;
     }
 
+    /**
+     * Calculates and return production multiplier for Army
+     *
+     * @return multiplier for Army
+     */
     public double getArmyMultiplier() {
         double mult = 1;
-        double tools = this.l.getResources()[1];
+        double tools = this.resourceM.getTools();
         int soldiers = this.hD.getListOfWorkersAtPlace(Factories.ARMY).size();
         tools = tools / soldiers;
         tools /= 100;
@@ -118,7 +151,7 @@ public class Multiplier {
 
     private double soldierMultiplier() {
         if (this.hD.numberOfAdults() != 0) {
-            double soldierPercent = this.hD.getNumberOfWorkers()[3] / this.hD.numberOfAdults();
+            double soldierPercent = this.hD.soldierPercent();
             if (soldierPercent > 0.2 || soldierPercent < 0.05) {
                 return 0.9;
             }

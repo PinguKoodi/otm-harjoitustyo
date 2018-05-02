@@ -9,7 +9,7 @@ package society.domain;
  *
  * @author pyylauri
  */
-public class Human implements Comparable<Human> {
+public class Human implements WorkerUnit, Comparable<WorkerUnit> {
 
     private String name;
     private int age;
@@ -37,16 +37,8 @@ public class Human implements Comparable<Human> {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getAge() {
         return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public int getExperience() {
@@ -57,14 +49,22 @@ public class Human implements Comparable<Human> {
         this.experience = experience;
     }
 
+    /**
+     * Grows the age and experience of human by one.
+     */
     public void growOlder() {
         this.age++;
         this.experience += 1;
     }
 
+    /**
+     * Creates a string describing the human
+     *
+     * @return String which haves all data of human
+     */
     @Override
     public String toString() {
-        String skillLevel = "";
+        String skillLevel;
         if (experience < 20) {
             skillLevel = "Unskilled";
         } else if (experience < 40) {
@@ -77,12 +77,27 @@ public class Human implements Comparable<Human> {
         return this.name + ", Age: " + this.age + ", " + skillLevel;
     }
 
+    /**
+     * Creates a string that haves details of human that can be used to save it
+     *
+     * @return String which haves all attributes separated by ;
+     */
     public String getFileString() {
         return this.name + ";" + this.age + ";" + this.experience;
     }
 
+    /**
+     * Compares Human to another one by their age
+     *
+     * @param wu
+     * @return
+     */
     @Override
-    public int compareTo(Human h) {
-        return -this.age + h.getAge();
+    public int compareTo(WorkerUnit wu) {
+        if (wu.getClass().equals(this.getClass())) {
+            return -this.age + wu.getAge();
+        }
+        return -1;
     }
+
 }

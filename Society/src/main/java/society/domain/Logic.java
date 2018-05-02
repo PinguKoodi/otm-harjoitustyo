@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import society.data.FileOperator;
+import society.data.SaveOperator;
 
 /**
  *
@@ -16,138 +17,175 @@ import society.data.FileOperator;
  */
 public class Logic {
 
-    private HumanDistributor hD;
-    private double[] resources;
+    private Distributor hD;
+    private ResourceManager resources;
     private int year;
     private Random rng;
     private Multiplier mult;
     private double happiness;
-    private FileOperator operator;
+    private SaveOperator operator;
 
-    public Logic(HumanDistributor hD) {
-        this.hD = hD;
+    public Logic(Distributor dist) {
+        this.hD = dist;
         this.rng = new Random();
-        this.mult = new Multiplier(this, this.hD);
         this.operator = new FileOperator(this);
-        initializeResources();
+        this.resources = new ResourceManager();
+        this.resources.initializeResources();
+        this.mult = new Multiplier(this.resources, this.hD);
     }
 
+    /**
+     * Starts the game by setting resources to initial values and creating first
+     * group of people, or by loading the values from a save file.
+     *
+     * @param loadedGame if true, game will load the state from save file
+     */
     public void startGame(boolean loadedGame) {
-        initializeResources();
+        this.year = 0;
+        this.happiness = 50;
+        this.resources.initializeResources();
         this.hD.killAll();
         if (loadedGame) {
             operator.switchToLoadFromSave();
-            this.loadHumans();
+            this.loadSaveData();
         } else {
-            createFirstHumans();
+            createFirstWorkerUnits();
         }
-//        this.createFirstHumans();
         operator.switchToLoadFromSave();
     }
 
-    public void loadHumans() {
-        double[] values = operator.readValuesFromFile();
-        Map<Human, Factories> humans = operator.readHumansFromFile();
+    /**
+     * Loads humans and values from a save file and adds them to the distributor
+     */
+    public void loadSaveData() {
+        double[] values = operator.readValuesFromSave();
+        Map<WorkerUnit, Factories> humans = operator.readHumansFromSave();
         for (int i = 0; i < 6; i++) {
             if (i < 4) {
-                resources[i] = values[i];
+                this.resources.setOneResource(values[i], i);
             } else if (i == 4) {
                 this.year = (int) values[i];
             } else {
                 this.happiness = values[i];
             }
         }
-        for (Human h : humans.keySet()) {
-            this.hD.addHuman(h);
-            if (humans.get(h) != null) {
-                this.hD.setHumanFactory(h, humans.get(h));
+        for (WorkerUnit wu : humans.keySet()) {
+            this.hD.addWorkerUnit(wu);
+            if (humans.get(wu) != null) {
+                this.hD.setWorkerUnitFactory(wu, humans.get(wu));
             }
         }
-        this.hD.sortHumansByAge();
+        this.hD.sortByAge();
     }
 
+    /**
+     * Assign a random unemployed worker to the specified factory given as
+     * parameter. If there is no unemployed workers, won't do anything.
+     *
+     * @param f factory where unemployed person is assigned
+     */
     public void assignWorker(Factories f) {
         if (this.isUnemployed()) {
-            Human h = this.hD.getUnemployed();
-            this.hD.setHumanFactory(h, f);
+            WorkerUnit wU = this.hD.getUnemployed();
+            this.hD.setWorkerUnitFactory(wU, f);
         }
     }
 
-//    public boolean saveToFile() {
-//        return operator.saveToFile();
-//    }
-    
+    /**
+     * Saves the current gameState to file
+     *
+     * @return true if saving is successful, false otherwise
+     */
     public boolean saveToFile() {
-        return operator.saveToFile();
+        return operator.saveGame();
     }
 
+    public void setOperator(SaveOperator operator) {
+        this.operator = operator;
+    }
+
+    /**
+     * Ends a game turn, which forwards the year by one. Assigned workers will
+     * produce resources and everyone will age Possible resource loss will
+     * happen, and babies may be born, depending on the circumstances
+     *
+     * @return returns true if everyone is dead and game will end, false
+     * otherwise
+     */
     public boolean endTurn() {
-        boolean foodIsOut = this.resources[0] < 0;
+        boolean foodIsOut = this.resources.getFood() < 0;
         double[] prods = this.getProduction();
-        for (int i = 0; i < 4; i++) {
-            this.resources[i] += prods[i];
-        }
-        calculateResourceLoss();
-        calculateHappiness(foodIsOut);
-        if (foodIsOut && this.resources[0] < 0) {
-            this.hD.kill(this.resources[0]);
+        this.resources.addProduction(prods);
+        this.resources.calculateResourceLoss(this.hD.getNumberOfWorkers()[3]);
+        calculateHappiness();
+        if (foodIsOut && this.resources.getFood() < 0) {
+            this.hD.kill(this.resources.getFood());
         }
         if (this.hD.getList().isEmpty()) {
             return true;
         }
         this.hD.makeOneYearOlder();
-        this.makeBabies(prods[0]);
+        this.hD.makeBabies(prods[0]);
         year++;
         return false;
     }
 
+    /**
+     * Checks whether there is unemployed workers
+     *
+     * @return boolean value describing whether there is unemployed or not
+     */
     public boolean isUnemployed() {
         return this.hD.numberOfUnemployed() > 0;
     }
 
+    /**
+     * Return resources from resource class
+     *
+     * @return double array containing resource values
+     */
     public double[] getResources() {
-        return resources;
+        return this.resources.getResources();
     }
 
+    /**
+     * Returns resources in a rounded from where there is one decimal
+     *
+     * @return double array containing trimmed values
+     */
     public double[] getResourcesDisplay() {
-        return trimDoubleArray(this.resources);
+        return trimDoubleArray(this.resources.getResources());
     }
 
     public int getYear() {
         return year;
     }
 
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    private void calculateHappiness(boolean foodIsOut) {
-        double amountOfPeople = this.hD.getPopulation();
-        double change = 0;
-        if (foodIsOut) {
-            change -= 5;
-        } else if (resources[0] > amountOfPeople) {
-            change += 2;
-        }
-        change += ((resources[1] / amountOfPeople) - 1);
-        change += Math.max(resources[2] - year * 2, -0.2);
-        if (this.hD.getListOfWorkersAtPlace(Factories.ARMY).size() > amountOfPeople * 0.2) {
-            change += -5;
+    private void calculateHappiness() {
+        int amountOfPeople = this.hD.getPopulation();
+        double change = this.resources.calculateResourceEffectOnHappiness(amountOfPeople);
+        if (this.hD.soldierPercent() < 0.05 || this.hD.soldierPercent() > 0.2) {
+            change -= 3;
         }
         change = Math.max(-5, change);
         change = Math.min(5, change);
         this.happiness += change;
         this.happiness = Math.max(0, happiness);
-        this.happiness = Math.min(120, happiness);
+        this.happiness = Math.min(100, happiness);
     }
 
+    /**
+     * Rounds happiness to one decimal
+     *
+     * @return happiness value rounded to one decimal
+     */
     public double getHappiness() {
         double temp = Math.round(happiness * 10);
         temp /= 10;
         return temp;
     }
 
-    public HumanDistributor gethD() {
+    public Distributor gethD() {
         return hD;
     }
 
@@ -155,19 +193,28 @@ public class Logic {
         return this.operator.getGuideText();
     }
 
-    public void createFirstHumans() {
+    /**
+     * Creates a set of worker Units
+     */
+    public void createFirstWorkerUnits() {
         for (int i = 0; i < 17; i++) {
             if (i < 8) {
-                this.hD.setHumanFactory(new Human("A-" + i, 20 + i, 10 + i), Factories.FARM);
+                this.hD.setWorkerUnitFactory(new Human("A-" + i, 20 + i, 10 + i), Factories.FARM);
             } else if (i < 10) {
-                this.hD.addHuman(new Human("I-" + i, i * 2 - 5));
+                this.hD.addWorkerUnit(new Human("I-" + i, i * 2 - 5));
             } else {
-                this.hD.addHuman(new Human("X-" + i, 20));
+                this.hD.addWorkerUnit(new Human("X-" + i, 20));
             }
         }
-        this.hD.sortHumansByAge();
+        this.hD.sortByAge();
     }
 
+    /**
+     * Calculates year's production by using multipliers and amount of workers.
+     * Will return the values of production as an array.
+     *
+     * @return array of year's production values.
+     */
     public double[] getProduction() {
         double[] prods = new double[4];
         double[] multipliers = this.mult.getAllMultipliers();
@@ -185,10 +232,22 @@ public class Logic {
         return prods;
     }
 
+    /**
+     * Calculates to one decimal rounded values of resources and returns them in
+     * an array
+     *
+     * @return double array containing trimmed values
+     */
     public double[] getProductionDisplay() {
         return trimDoubleArray(this.getProduction());
     }
 
+    /**
+     * Trims a given array so that all values have just one decimal number
+     *
+     * @param array to be trimmed
+     * @return double array that has its values trimmed
+     */
     public double[] trimDoubleArray(double[] array) {
         double[] trimmed = new double[array.length];
         for (int i = 0; i < array.length; i++) {
@@ -198,51 +257,22 @@ public class Logic {
         return trimmed;
     }
 
-    private int makeBabies(double foodProd) {
-        int amountOfMothers = this.hD.amountOfReproducablePeople();
-        double babiesValue = rng.nextInt(Math.max(1, (int) Math.log(amountOfMothers)) * 3);
-        if (foodProd < 0.0) {
-            babiesValue /= 2;
-        }
-        int babies = (int) babiesValue;
-        for (int i = 0; i < babies; i++) {
-            int value = rng.nextInt(25) + 65;
-            char letter = (char) value;
-            this.hD.addHuman(new Human(letter + "-" + this.rng.nextInt(10000)));
-        }
-        return babies;
-    }
-
-    private void calculateResourceLoss() {
-        int soldiers = this.hD.getListOfWorkersAtPlace(Factories.ARMY).size();
-        int resourceSum = 0;
-        for (int i = 0; i < 4; i++) {
-            resourceSum += resources[i];
-        }
-        resourceSum /= 1000;
-        if (resourceSum > soldiers) {
-            for (int i = 0; i < 4; i++) {
-                if (i != 2) {
-                    resources[i] = resources[i] * 0.95;
-                }
-            }
-        }
-    }
-
-    public String getWorkplaceAsString(Human h) {
+    /**
+     * Returns a String version of the workerUnit's workplace
+     *
+     * @param h workerUnit which workplaces is wanted
+     * @return Workplace in a String form
+     */
+    public String getWorkplaceAsString(WorkerUnit h) {
         if (this.hD.getWorkPlaces().get(h) == null) {
             return "null";
         } else {
             return this.hD.getWorkPlaces().get(h).toString();
         }
     }
-    private void initializeResources() {
-        this.resources = new double[4];
-        this.resources[0] = 100;
-        for (int i = 1; i < 4; i++) {
-            this.resources[i] = 0;
-        }
-        this.year = 0;
-        this.happiness = 50;
+
+    public ResourceManager getResourceManager() {
+        return resources;
     }
+
 }
