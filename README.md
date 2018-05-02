@@ -13,6 +13,8 @@ Sinun tulee ohjata kansalaiset eri paikkoihin töihin jotta he tuottavat yhteisk
 
 [Arkkitehtuurikuvaus](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/arkkitehtuuri.md)
 
+[Käyttöohje](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/käyttöohje.md)
+
 ## Releaset
 
 [Viikon 5 release](https://github.com/PinguKoodi/otm-harjoitustyo/releases/tag/viikko5)
