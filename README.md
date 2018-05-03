@@ -19,6 +19,8 @@ Sinun tulee ohjata kansalaiset eri paikkoihin töihin jotta he tuottavat yhteisk
 
 [Viikon 5 release](https://github.com/PinguKoodi/otm-harjoitustyo/releases/tag/viikko5)
 
+[Viikon 6 release](https://github.com/PinguKoodi/otm-harjoitustyo/releases/tag/Viikko6)
+
 ## Komentorivintoiminnot
 Toiminnot ovat samat kuin kurssin ohjeissa, eli:
 
