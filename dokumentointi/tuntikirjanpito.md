@@ -11,4 +11,7 @@
 |22.4|3|Ui:n parantelua, ensi vuoron tuotannon näyttäminen ja lisää testejä|
 |23.4|4|Sovelluslogiikan perustoiminnallisuuden parantelua, tiedosto-olion toiminnallisuus myös jar-tiedostoksi pakattaessa ja pientä ui-muokkailua|
 |24.4|4|Varmistus että viikon tavoitteet täyttyvät, taas uusi versio tiedostotoiminnallisuudesta ja releasen teko|
-|Summa|31|
+|29.4|3|Parin rajapinnan teko ja niiden vaatimat muutokset, ui:hin lisäys sotilaiden punaiseen väriin|
+|2.5|6|ResourceManager-luokan teko, JUnit-testien lisäily, JDocin aloitus, pientä refaktorointia ja dokumennoinnin kirjoittelua|
+|Summa|40|
+
