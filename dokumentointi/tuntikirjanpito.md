@@ -13,5 +13,7 @@
 |24.4|4|Varmistus että viikon tavoitteet täyttyvät, taas uusi versio tiedostotoiminnallisuudesta ja releasen teko|
 |29.4|3|Parin rajapinnan teko ja niiden vaatimat muutokset, ui:hin lisäys sotilaiden punaiseen väriin|
 |2.5|6|ResourceManager-luokan teko, JUnit-testien lisäily, JDocin aloitus, pientä refaktorointia ja dokumennoinnin kirjoittelua|
-|Summa|40|
+|9.5|2|Testien kirjoittelua ja yleistä pientä bugi-korjailua|
+|10.5|5|Työn viimeistelyä, dokumenttien kirjoittamista ja testauskattavuuden kasvatusta. Lisäksi config-tiedoston luominen käyttäjän näkyville|
+|Summa|47|
 
