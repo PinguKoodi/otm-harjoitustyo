@@ -6,9 +6,12 @@ Ohjelmassa on kolmitasoinen kerrosarkkitehtuuri, jossa pakkaus society.ui sisäl
 ## Luokkakaavio
 Luokkakaavio josta selviää tärkeimmät riippuvuussuhteet
 <img src="https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/Grafiikat/classDiagram.jpg"/>
-Uudistettu pakkausrakennetta kuvaavaa kaavio:
+
+Pakkausrakennetta kuvaavaa kaavio:
 
 <img src="https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/Grafiikat/SocietyV3.png"/>
+
+Kaaviosta selviää eri pakkauksiin kuuluvat luokat, sekä niiden välisiä suhteita
 
 ## Sovelluslogiikka
 Sovelluksen toiminnan keskuksena on luokka Logic, joka käsittelee käyttöliittymän, eli luokan Main sille lähettämiä pyyntöjä ja käskyjä. 
