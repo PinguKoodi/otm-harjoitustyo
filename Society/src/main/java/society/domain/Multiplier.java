@@ -15,12 +15,21 @@ public class Multiplier {
 
     private ResourceManager resourceM;
     private Distributor hD;
+    private double difficulty;
 
     public Multiplier(ResourceManager rM, Distributor dist) {
         this.resourceM = rM;
         this.hD = dist;
+        this.difficulty = 1;
     }
-
+    /**
+     * Sets a difficulty level, which is multiplied to all the multipliers affecting
+     * all resource production.
+     * @param diff double that tells the difficulty
+     */
+    public void setDifficulty(double diff) {
+        this.difficulty = diff;
+    }
     /**
      * Calculates and returns all four multipliers for different factories
      *
@@ -31,7 +40,7 @@ public class Multiplier {
         for (int i = 0; i < 4; i++) {
             int[] numberOfWorkers = this.hD.getNumberOfWorkers();
             if (numberOfWorkers[i] > 0) {
-                mults[i] = this.getMultiplier(i);
+                mults[i] = this.getMultiplier(i)* this.difficulty;
             } else {
                 mults[i] = 0;
             }
@@ -129,9 +138,12 @@ public class Multiplier {
         experience++;
         mult *= experience;
         mult *= ((scientists / 100) + 1);
+        mult *= soldierMultiplier();
         return mult;
     }
-
+    
+    
+    
     /**
      * Calculates and return production multiplier for Army
      *
@@ -152,7 +164,7 @@ public class Multiplier {
     private double soldierMultiplier() {
         if (this.hD.numberOfAdults() != 0) {
             double soldierPercent = this.hD.soldierPercent();
-            if (soldierPercent > 0.2 || soldierPercent < 0.05) {
+            if (soldierPercent < 0.1) {
                 return 0.9;
             }
         }

@@ -20,4 +20,6 @@ public interface SaveOperator {
     public String getGuideText();
     public double[] readValuesFromSave();
     public Map<WorkerUnit, Factories> readHumansFromSave();
+    public int getStartingHumans();
+    public double getDifficulty();
 }

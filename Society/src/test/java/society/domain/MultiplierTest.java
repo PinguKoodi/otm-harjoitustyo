@@ -72,7 +72,22 @@ public class MultiplierTest {
         assertEquals(0.7,this.mult.getFactoryMultiplier(),0.1);
     }
    
-
+    @Test
+    public void getMultiplierOutOfBoundsReturnsOne() {
+        assertEquals(1.0,this.mult.getMultiplier(6),0.1);
+    }
+    @Test
+    public void soldierMultiplierReturnsOneWhenThereIsEnoughSoldiers() {
+        this.dist.setWorkerUnitFactory(new Human("A",20), Factories.ARMY);
+        this.dist.setWorkerUnitFactory(new Human("A",20), Factories.LABORATORY);
+        assertEquals(0.1,this.mult.getLaboratoryMultiplier(),0.0001);
+    }
+    @Test
+    public void soldierMultiplierReturnsCorrectAmountWhenThereIsntEnoughSoldiers() {
+        this.dist.setWorkerUnitFactory(new Human("A",20), Factories.FARM);
+        this.dist.setWorkerUnitFactory(new Human("A",20), Factories.LABORATORY);
+        assertEquals(0.09,this.mult.getLaboratoryMultiplier(),0.001);
+    }
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //

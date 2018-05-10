@@ -47,38 +47,126 @@ public class FileOperator implements SaveOperator {
     private String dataString;
     private String humanString;
 
+    /**
+     * Creates Fileoperator that loads configurations from a resources folder
+     * and saves the logic
+     *
+     * @param logic Saves the logic give as parameter, to know where to find
+     * data to be saved
+     */
     public FileOperator(Logic logic) {
         this.l = logic;
         try {
             properties = new Properties();
-            properties.load(this.getClass().getResourceAsStream("/files/config.txt"));
-            dataString = properties.getProperty("firstValues");
-            this.data = new File(this.getClass().getResource("/files/" + dataString).toURI());
+            File jarFile = new File(FileOperator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            String dataFilePath = jarFile.getParent() + File.separator + "config.txt";
+            FileInputStream configStream = new FileInputStream(dataFilePath);
+            properties.load(configStream);
+//            dataString = properties.getProperty("firstValues");
+//            this.data = new File(this.getClass().getResource("/files/" + dataString).toURI());
             //humanString = properties.getProperty("firstHumans");
             //this.humans = new File(this.getClass().getResource("/files/" + humanString).toURI());
+        } catch (Exception e) {
+            createNewConfigFile();
+        }
+    }
+
+    /**
+     * If the config file should be specified in the constructor
+     *
+     * @param logic Logic that gives data to operator
+     * @param config file where configurations will be saved
+     */
+    public FileOperator(Logic logic, File config) {
+        this.l = logic;
+        try {
+            properties = new Properties();
+            FileInputStream configStream = new FileInputStream(config);
+            properties.load(configStream);
+//            dataString = properties.getProperty("firstValues");
+//            this.data = new File(this.getClass().getResource("/files/" + dataString).toURI());
+            //humanString = properties.getProperty("firstHumans");
+            //this.humans = new File(this.getClass().getResource("/files/" + humanString).toURI());
+        } catch (Exception e) {
+            createNewConfigFile();
+        }
+    }
+
+    /**
+     * Sets a different properties file for the operator to use, mostly test
+     * purposes
+     *
+     * @param file File which the configurations are read from
+     */
+    public void setProperties(File file) {
+        try {
+            this.properties = new Properties();
+            properties.load(new FileInputStream(file));
+            this.config = file;
         } catch (Exception e) {
 
         }
     }
 
+    public File getConfig() {
+        return config;
+    }
+
+    /**
+     * Switches the system to load from save file rather than from starting file
+     */
     public void switchToLoadFromSave() {
         try {
             dataString = properties.getProperty("data");
 //            dataString = ClassLoader.getSystemClassLoader().getResource(".").getPath() + dataString;
-            humanString = properties.getProperty("humans");
             File jarFile = new File(FileOperator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             String dataFilePath = jarFile.getParent() + File.separator + dataString;
             this.data = new File(dataFilePath);
-            this.humans = new File("files/" + humanString);
-            this.data.createNewFile();
         } catch (Exception e) {
 
         }
 
     }
 
+    /**
+     * Gets the number of humans that are generated at the beginning of the game
+     *
+     * @return integer of the number of humans
+     */
+    public int getStartingHumans() {
+        try {
+            int amount = Integer.parseInt(this.properties.getProperty("startingHumans"));
+            if(amount >0) {
+                return amount;
+            }
+            return 17;
+        } catch (Exception e) {
+            return 17;
+        }
+    }
+
+    /**
+     * Return the difficulty level, which tells how much resource production is
+     * reduced
+     *
+     * @return the difficulty level
+     */
+    public double getDifficulty() {
+        try {
+            return Double.parseDouble(this.properties.getProperty("difficulty"));
+        } catch (Exception e) {
+            return 1.0;
+        }
+    }
+
+    /**
+     * Writes the current gamestate in the logic-Class to a text file
+     *
+     * @return true if saving was successful, false if not
+     */
     public boolean saveGame() {
         try {
+            data.createNewFile();
             File jarFile = new File(FileOperator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             String dataFilePath = jarFile.getParent() + File.separator + dataString;
             Path dataPath = Paths.get(dataFilePath);
@@ -106,6 +194,12 @@ public class FileOperator implements SaveOperator {
         return lines;
     }
 
+    /**
+     * Reads the resource amounts, year and happiness from a save file that is
+     * known to the class
+     *
+     * @return array containing the values
+     */
     public double[] readValuesFromSave() {
         double[] table = new double[6];
         try {
@@ -121,6 +215,12 @@ public class FileOperator implements SaveOperator {
         return table;
     }
 
+    /**
+     * Reads workerUnits from the file known to the unit.
+     *
+     * @return Map containing the WorkerUnits as keys, and their workplaces as
+     * their corresponding values
+     */
     public Map<WorkerUnit, Factories> readHumansFromSave() {
         Map<WorkerUnit, Factories> map = new HashMap();
         try {
@@ -140,6 +240,11 @@ public class FileOperator implements SaveOperator {
         return map;
     }
 
+    /**
+     * Reads the guide text from a file in the resources folder
+     *
+     * @return String which is the text
+     */
     public String getGuideText() {
         String text = "";
         try {
@@ -151,5 +256,31 @@ public class FileOperator implements SaveOperator {
 
         }
         return text;
+    }
+
+    /**
+     * Creates a new configuration file if it doesnt exists and writes default
+     * conditions to it
+     */
+    private void createNewConfigFile() {
+        try {
+            File jarFile = new File(FileOperator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            String dataFilePath = jarFile.getParent() + File.separator + "config.txt";
+            this.config = new File(dataFilePath);
+            this.config.createNewFile();
+            List<String> listToWrite = new ArrayList();
+            listToWrite.add("firstValues=easyStartData.txt");
+            listToWrite.add("data=saveData.txt");
+            listToWrite.add("guide=guide.txt");
+            listToWrite.add("startingHumans=17");
+            listToWrite.add("difficulty=1.0");
+            Files.write(this.config.toPath(), listToWrite);
+            FileInputStream configStream = new FileInputStream(dataFilePath);
+            properties.load(configStream);
+            dataString = properties.getProperty("firstValues");
+            this.data = new File(this.getClass().getResource("/files/" + dataString).toURI());
+        } catch (Exception e) {
+
+        }
     }
 }

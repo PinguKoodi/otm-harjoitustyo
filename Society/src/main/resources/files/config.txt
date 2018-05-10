@@ -1,5 +1,6 @@
-firstHumans=easyStartHumans.txt
 firstValues=easyStartData.txt
 data=saveData.txt
 humans=saveHumans.txt
 guide=guide.txt
+startingHumans=17
+difficulty=1.0

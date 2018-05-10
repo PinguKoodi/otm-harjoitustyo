@@ -137,9 +137,7 @@ public class HumanDistributor implements Distributor {
                         break;
                     case LABORATORY:workerAmounts[2] = workerAmounts[2] + 1;
                         break;
-                    case ARMY:workerAmounts[3] = workerAmounts[3] + 1;
-                        break;
-                    default:
+                    default:workerAmounts[3] = workerAmounts[3] + 1;
                         break;
                 }
             }
@@ -201,12 +199,10 @@ public class HumanDistributor implements Distributor {
         List<WorkerUnit> toBeKilled = new ArrayList();
         for (WorkerUnit h : this.list) {
             h.growOlder();
-            if (h.getAge() > 80) {
-                Random r = new Random();
-                if (r.nextInt(20) + h.getAge() > 100) {
-                    toBeKilled.add(h);
-                    this.workPlaces.remove(h);
-                }
+            Random r = new Random();
+            if (r.nextInt(20) + h.getAge() > 100) {
+                toBeKilled.add(h);
+                this.workPlaces.remove(h);
             }
         }
         this.list.removeAll(toBeKilled);

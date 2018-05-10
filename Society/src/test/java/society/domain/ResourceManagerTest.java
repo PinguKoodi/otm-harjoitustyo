@@ -31,11 +31,23 @@ public class ResourceManagerTest {
     }
     
     @Test
-    public void initializeResourcesAddsCorrectAmounts() {
+    public void initializeResourcesAddsCorrectAmountOfFood() {
         this.rM.initializeResources();
         assertEquals(100.0,this.rM.getFood(),0.1);
+    }
+    @Test
+    public void initializeResourcesAddsCorrectAmountOfTools() {
+        this.rM.initializeResources();
         assertEquals(0.0,this.rM.getTools(),0.1);
+    }
+    @Test
+    public void initializeResourcesAddsCorrectAmountOfScience() {
+        this.rM.initializeResources();
         assertEquals(0.0,this.rM.getScience(),0.1);
+    }
+    @Test
+    public void initializeResourcesAddsCorrectAmountOfGuns() {
+        this.rM.initializeResources();
         assertEquals(0.0,this.rM.getGuns(),0.1);
     }
     @Test
@@ -56,7 +68,34 @@ public class ResourceManagerTest {
         this.rM.setOneResource(1000, 1);
         this.rM.calculateResourceLoss(0);
         assertEquals(95.0,this.rM.getFood(),0.1);
+    }
+    @Test
+    public void resourceLossWorksForTools() {
+        this.rM.initializeResources();
+        this.rM.setOneResource(1000, 1);
+        this.rM.calculateResourceLoss(0);
         assertEquals(950.0,this.rM.getTools(),0.1);
+    }
+    
+    @Test
+    public void resourcesEffectHappinesCorrectlyWhenThereIsntEnoughTools() {
+        this.rM.setResources(new double[]{5,0,5,5});
+        assertEquals(5,this.rM.calculateResourceEffectOnHappiness(3),0.001);
+    }
+    @Test
+    public void resourcesEffectHappinesCorrectlyWhenThereIsntEnoughFood() {
+        this.rM.setResources(new double[]{-1,5,5,5});
+        assertEquals(-1,this.rM.calculateResourceEffectOnHappiness(3),0.001);
+    }
+    @Test
+    public void resourcesEffectHappinesCorrectlyWhenThereIsEnoughScience() {
+        this.rM.setResources(new double[]{0,0,5,5});
+        assertEquals(2,this.rM.calculateResourceEffectOnHappiness(3),0.001);
+    }
+    @Test
+    public void resourcesEffectHappinesCorrectlyWhenThereIsNotAnything() {
+        this.rM.setResources(new double[]{0,0,0,0});
+        assertEquals(-3,this.rM.calculateResourceEffectOnHappiness(3),0.001);
     }
     
     

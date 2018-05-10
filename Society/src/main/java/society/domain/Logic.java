@@ -5,6 +5,7 @@
  */
 package society.domain;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -33,7 +34,16 @@ public class Logic {
         this.resources.initializeResources();
         this.mult = new Multiplier(this.resources, this.hD);
     }
+    public Logic(Distributor dist, File file) {
+        this.hD = dist;
+        this.rng = new Random();
+        this.operator = new FileOperator(this,file);
+        this.resources = new ResourceManager();
+        this.resources.initializeResources();
+        this.mult = new Multiplier(this.resources, this.hD);
+    }
 
+    
     /**
      * Starts the game by setting resources to initial values and creating first
      * group of people, or by loading the values from a save file.
@@ -52,6 +62,7 @@ public class Logic {
             createFirstWorkerUnits();
         }
         operator.switchToLoadFromSave();
+        this.mult.setDifficulty(operator.getDifficulty());
     }
 
     /**
@@ -100,9 +111,7 @@ public class Logic {
         return operator.saveGame();
     }
 
-    public void setOperator(SaveOperator operator) {
-        this.operator = operator;
-    }
+    
 
     /**
      * Ends a game turn, which forwards the year by one. Assigned workers will
@@ -197,7 +206,8 @@ public class Logic {
      * Creates a set of worker Units
      */
     public void createFirstWorkerUnits() {
-        for (int i = 0; i < 17; i++) {
+        int amount = this.operator.getStartingHumans();
+        for (int i = 0; i < amount; i++) {
             if (i < 8) {
                 this.hD.setWorkerUnitFactory(new Human("A-" + i, 20 + i, 10 + i), Factories.FARM);
             } else if (i < 10) {
@@ -274,5 +284,14 @@ public class Logic {
     public ResourceManager getResourceManager() {
         return resources;
     }
+
+    public void setOperator(SaveOperator operator) {
+        this.operator = operator;
+    }
+    
+    public SaveOperator getOperator() {
+        return operator;
+    }
+    
 
 }
