@@ -5,7 +5,7 @@ Ohjelmassa on kolmitasoinen kerrosarkkitehtuuri, jossa pakkaus society.ui sisäl
 
 ## Luokkakaavio
 Luokkakaavio josta selviää tärkeimmät riippuvuussuhteet
-<img src="https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/Grafiikat/SocietyClassDiagramV2.jpg"/>
+<img src="https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/Grafiikat/classDiagram.jpg"/>
 Uudistettu pakkausrakennetta kuvaavaa kaavio:
 
 <img src="https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/Grafiikat/SocietyV3.png"/>
