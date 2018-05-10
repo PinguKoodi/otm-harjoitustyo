@@ -5,44 +5,31 @@
  */
 package society.ui;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import javafx.scene.input.KeyEvent;
 import society.domain.HumanDistributor;
 import society.domain.Logic;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import society.domain.Distributor;
 import society.domain.Factories;
-import society.domain.Human;
 
 /**
  *
@@ -80,7 +67,6 @@ public class Main extends Application {
     @Override
     public void start(Stage window2) {
         GridPane startSet = new GridPane();
-//        startSet.setMinWidth(150);
         startSet.setVgap(20);
         startSet.setPadding(new Insets(20, 20, 20, 20));
         Button beginGame = new Button("Start new game");
@@ -164,17 +150,11 @@ public class Main extends Application {
         setting.add(toolProd, 4, 2);
         setting.add(scienceProd, 4, 3);
         setting.add(gunProd, 4, 4);
-//        setting.add(new Label("Tools:" + this.logic.getResources()[1]), 2, 0);
-//        setting.add(new Label("Science:" + this.logic.getResources()[2]), 3, 0);
-//        setting.add(new Label("Guns:" + this.logic.getResources()[3]), 4, 0);
-
         Button saveGame = new Button("Save game");
         setting.add(saveGame, 2, 6);
         saveGame.setOnAction((event) -> {
             fileSavedWindow(this.logic.saveToFile());
         });
-
-        //createAssignButtons(setting);
         Button farmB = new Button("Assing to Farm");
         HBox hFarmB = new HBox(10);
         hFarmB.getChildren().add(farmB);
@@ -346,13 +326,10 @@ public class Main extends Application {
         } else {
             this.soldiers.setTextFill(Color.BLACK);
         }
-//        foodProd.setTranslateX(85.0);
+
         toolProd.setTextFill(Color.GREEN);
-//        toolProd.setTranslateX(80.0);
         scienceProd.setTextFill(Color.GREEN);
-//        scienceProd.setTranslateX(90.0);
         gunProd.setTextFill(Color.GREEN);
-//        gunProd.setTranslateX(80.0);
         foodTools.setMinWidth(110);
         tools.setMinWidth(110);
         scienceGuns.setMinWidth(110);

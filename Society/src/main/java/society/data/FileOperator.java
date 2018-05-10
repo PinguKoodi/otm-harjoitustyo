@@ -5,18 +5,12 @@
  */
 package society.data;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-import static java.nio.file.StandardOpenOption.WRITE;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,10 +20,6 @@ import java.util.Scanner;
 import society.domain.Factories;
 import society.domain.Human;
 import society.domain.Logic;
-import society.ui.Main;
-
-import java.io.StringWriter;
-import java.io.PrintWriter;
 import society.domain.WorkerUnit;
 
 /**
@@ -62,10 +52,6 @@ public class FileOperator implements SaveOperator {
             String dataFilePath = jarFile.getParent() + File.separator + "config.txt";
             FileInputStream configStream = new FileInputStream(dataFilePath);
             properties.load(configStream);
-//            dataString = properties.getProperty("firstValues");
-//            this.data = new File(this.getClass().getResource("/files/" + dataString).toURI());
-            //humanString = properties.getProperty("firstHumans");
-            //this.humans = new File(this.getClass().getResource("/files/" + humanString).toURI());
         } catch (Exception e) {
             createNewConfigFile();
         }
@@ -83,10 +69,6 @@ public class FileOperator implements SaveOperator {
             properties = new Properties();
             FileInputStream configStream = new FileInputStream(config);
             properties.load(configStream);
-//            dataString = properties.getProperty("firstValues");
-//            this.data = new File(this.getClass().getResource("/files/" + dataString).toURI());
-            //humanString = properties.getProperty("firstHumans");
-            //this.humans = new File(this.getClass().getResource("/files/" + humanString).toURI());
         } catch (Exception e) {
             createNewConfigFile();
         }
@@ -118,7 +100,6 @@ public class FileOperator implements SaveOperator {
     public void switchToLoadFromSave() {
         try {
             dataString = properties.getProperty("data");
-//            dataString = ClassLoader.getSystemClassLoader().getResource(".").getPath() + dataString;
             File jarFile = new File(FileOperator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             String dataFilePath = jarFile.getParent() + File.separator + dataString;
             this.data = new File(dataFilePath);
@@ -269,9 +250,7 @@ public class FileOperator implements SaveOperator {
             this.config = new File(dataFilePath);
             this.config.createNewFile();
             List<String> listToWrite = new ArrayList();
-            listToWrite.add("firstValues=easyStartData.txt");
             listToWrite.add("data=saveData.txt");
-            listToWrite.add("guide=guide.txt");
             listToWrite.add("startingHumans=17");
             listToWrite.add("difficulty=1.0");
             Files.write(this.config.toPath(), listToWrite);
