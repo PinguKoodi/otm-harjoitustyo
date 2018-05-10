@@ -136,7 +136,7 @@ public class FileOperator implements SaveOperator {
     public int getStartingHumans() {
         try {
             int amount = Integer.parseInt(this.properties.getProperty("startingHumans"));
-            if(amount >0) {
+            if (amount > 0) {
                 return amount;
             }
             return 17;

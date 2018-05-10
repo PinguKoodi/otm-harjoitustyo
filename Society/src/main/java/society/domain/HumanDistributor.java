@@ -137,7 +137,7 @@ public class HumanDistributor implements Distributor {
                         break;
                     case LABORATORY:workerAmounts[2] = workerAmounts[2] + 1;
                         break;
-                    default:workerAmounts[3] = workerAmounts[3] + 1;
+                    case ARMY:workerAmounts[3] = workerAmounts[3] + 1;
                         break;
                 }
             }

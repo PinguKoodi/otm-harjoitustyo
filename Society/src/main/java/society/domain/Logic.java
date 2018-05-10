@@ -34,16 +34,16 @@ public class Logic {
         this.resources.initializeResources();
         this.mult = new Multiplier(this.resources, this.hD);
     }
+
     public Logic(Distributor dist, File file) {
         this.hD = dist;
         this.rng = new Random();
-        this.operator = new FileOperator(this,file);
+        this.operator = new FileOperator(this, file);
         this.resources = new ResourceManager();
         this.resources.initializeResources();
         this.mult = new Multiplier(this.resources, this.hD);
     }
 
-    
     /**
      * Starts the game by setting resources to initial values and creating first
      * group of people, or by loading the values from a save file.
@@ -110,8 +110,6 @@ public class Logic {
     public boolean saveToFile() {
         return operator.saveGame();
     }
-
-    
 
     /**
      * Ends a game turn, which forwards the year by one. Assigned workers will
@@ -288,10 +286,9 @@ public class Logic {
     public void setOperator(SaveOperator operator) {
         this.operator = operator;
     }
-    
+
     public SaveOperator getOperator() {
         return operator;
     }
-    
 
 }
