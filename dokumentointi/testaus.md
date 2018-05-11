@@ -9,7 +9,7 @@ FileOperatorTest-luokka testaa Logic-luokan ja FileOperator-luokan yhteistoiminn
 
 ## Testauskattavuudesta
 <img src="https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/Grafiikat/Testauskattavuus.PNG"/>
-Testein rivikattavuus on kokonaisuudessaan 94%, ja haaraumakattavuus on 96%. Suurin testaamatta jäänyt metodi on FileOperator-luokan createNewConfigFile(), mutta sen toiminta on testattu käyttäjätasolta. Testeissä ollaan pyritty huomioimaan myös mahdollisia outoja tai erikoisia tilanteita, jotta ohjelman käytös olisi ennustettavaa.
+Testein rivikattavuus on kokonaisuudessaan 97%, ja haaraumakattavuus on 96%. Suurin testaamatta jäänyt metodi on FileOperator-luokan createNewConfigFile(), mutta sen toiminta on testattu käyttäjätasolta. Testeissä ollaan pyritty huomioimaan myös mahdollisia outoja tai erikoisia tilanteita, jotta ohjelman käytös olisi ennustettavaa.
 
 ## Järjestelmätestaus
 Ohjelmaa on testattu manuaalisesti erilaisissa tilanteissa, että se toteuttaa vaatimusmäärittelyn ja ei kaadu missään vaiheessa.

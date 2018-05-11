@@ -2,9 +2,10 @@ package society.domain;
 
 import java.io.File;
 import java.util.Map;
-import java.util.Random;
 import society.data.FileOperator;
 import society.data.SaveOperator;
+import org.apache.commons.rng.UniformRandomProvider;
+import org.apache.commons.rng.simple.RandomSource;
 
 /**
  *
@@ -15,14 +16,14 @@ public class Logic {
     private Distributor hD;
     private ResourceManager resources;
     private int year;
-    private Random rng;
+    private UniformRandomProvider rng;
     private Multiplier mult;
     private double happiness;
     private SaveOperator operator;
 
     public Logic(Distributor dist) {
         this.hD = dist;
-        this.rng = new Random();
+        this.rng = RandomSource.create(RandomSource.WELL_1024_A);
         this.operator = new FileOperator(this);
         this.resources = new ResourceManager();
         this.resources.initializeResources();
@@ -31,7 +32,7 @@ public class Logic {
 
     public Logic(Distributor dist, File file) {
         this.hD = dist;
-        this.rng = new Random();
+        this.rng = RandomSource.create(RandomSource.WELL_1024_A);
         this.operator = new FileOperator(this, file);
         this.resources = new ResourceManager();
         this.resources.initializeResources();
@@ -200,12 +201,10 @@ public class Logic {
     public void createFirstWorkerUnits() {
         int amount = this.operator.getStartingHumans();
         for (int i = 0; i < amount; i++) {
-            if (i < 8) {
-                this.hD.setWorkerUnitFactory(new Human("A-" + i, 20 + i, 10 + i), Factories.FARM);
-            } else if (i < 10) {
-                this.hD.addWorkerUnit(new Human("I-" + i, i * 2 - 5));
+            if (i < amount / 2) {
+                this.hD.setWorkerUnitFactory(new Human("A-" + i, 20 + rng.nextInt(20), 10 + i), Factories.FARM);
             } else {
-                this.hD.addWorkerUnit(new Human("X-" + i, 20));
+                this.hD.addWorkerUnit(new Human("A-" + i, 8 + this.rng.nextInt(60)));
             }
         }
         this.hD.sortByAge();

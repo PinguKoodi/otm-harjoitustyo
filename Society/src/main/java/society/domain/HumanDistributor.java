@@ -11,8 +11,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import society.domain.*;
+import org.apache.commons.rng.UniformRandomProvider;
+import org.apache.commons.rng.simple.RandomSource;
+
 
 /**
  *
@@ -106,7 +107,7 @@ public class HumanDistributor implements Distributor {
      */
     public void makeBabies(double foodProd) {
         int amountOfMothers = amountOfReproducablePeople();
-        Random rng = new Random();
+        UniformRandomProvider rng = RandomSource.create(RandomSource.WELL_1024_A);
         double babiesValue = rng.nextInt(Math.max(1, (int) Math.log(amountOfMothers)) * 3);
         if (foodProd < 0.0) {
             babiesValue /= 2;
@@ -199,7 +200,7 @@ public class HumanDistributor implements Distributor {
         List<WorkerUnit> toBeKilled = new ArrayList();
         for (WorkerUnit h : this.list) {
             h.growOlder();
-            Random r = new Random();
+            UniformRandomProvider r = RandomSource.create(RandomSource.WELL_1024_A);
             if (r.nextInt(20) + h.getAge() > 100) {
                 toBeKilled.add(h);
                 this.workPlaces.remove(h);
