@@ -9,11 +9,13 @@ Sinun tulee ohjata kansalaiset eri paikkoihin töihin jotta he tuottavat yhteisk
 
 [Työn määrittelydokumentti](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/vaatimusm%C3%A4%C3%A4rittely.md)
 
-[Tuntikirjanpito](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/tuntikirjanpito.md)
+[Käyttöohje](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/käyttöohje.md)
 
 [Arkkitehtuurikuvaus](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/arkkitehtuuri.md)
 
-[Käyttöohje](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/käyttöohje.md)
+[Testaus](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/testaus.md)
+
+[Tuntikirjanpito](https://github.com/PinguKoodi/otm-harjoitustyo/blob/master/dokumentointi/tuntikirjanpito.md)
 
 ## Releaset
 
